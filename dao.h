@@ -2,6 +2,7 @@
 #define DAO_H
 #include <QString>
 #include <QJsonObject>
+#include <QJsonArray>
 
 class DAO
 {

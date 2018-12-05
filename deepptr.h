@@ -7,10 +7,15 @@ class DeepPtr {
 public:
     DeepPtr() : obj(nullptr) {}
     DeepPtr(const T &t) : obj(new T(t)) {} // copia la referenza
-    DeepPtr(const T *t) : obj(t) {} // assorbe il puntatore (DeepPtr<T> ptr = new T; diventa possibile)
     DeepPtr(const DeepPtr & ptr) : obj(new T(obj)) {}
-    T& operator *(void) {
-        return *obj;
+    DeepPtr& operator = (T* rhs) {
+        obj = rhs;
+    }
+    //preferisco un .get() a un overload di operator *(void)
+    T& get() {
+        if (obj)
+            return *obj;
+        return *obj; // TODO ERR nullptrException
     }
     ~DeepPtr() {
         if (obj)
