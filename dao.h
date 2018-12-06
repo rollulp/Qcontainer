@@ -7,11 +7,15 @@
 class DAO
 {
 public:
+    // typedefs qui per cambiare più in fretta in caso non
+    // si usasse più Qt
     typedef QJsonObject JSON;
     typedef QString string;
 
     static void setPath(const string & s);
     static string getPath();
+    static JSON loadFile();
+    static void writeFile(const JSON &json);
 
     virtual JSON getJSON () const = 0;
     virtual void loadFromJSON (const JSON &) = 0;

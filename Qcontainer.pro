@@ -27,7 +27,8 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     dao.cpp \
-    dildo.cpp
+    dildo.cpp \
+    myexception.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -35,7 +36,8 @@ HEADERS += \
     container.h \
     container_dao.h \
     deepptr.h \
-    dildo.h
+    dildo.h \
+    myexception.h
 
 FORMS += \
         mainwindow.ui

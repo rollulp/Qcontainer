@@ -38,15 +38,7 @@ template<>
 class DeepPtr<Dildo> : public DAO {
     Dildo *obj;
 public:
-    virtual JSON getJSON () const {
-        JSON json;
-        json["type"] = obj->getCategory();
-        return json;
-
-    }
-    virtual void loadFromJSON (const JSON &json) {
-        string s = json["type"].toString();
-    }
+/*constructors & stuff*/
     DeepPtr() : obj(nullptr) {}
     DeepPtr(const DeepPtr<Dildo> & ptr) : obj(ptr.get().clone()) {}
     ~DeepPtr() {
@@ -57,6 +49,8 @@ public:
         obj = rhs->clone();
         return *this;
     }
+
+/*methods*/
     //preferisco un .get() a un overload di operator *(void)
     Dildo& get() const {
         if (obj)
@@ -70,6 +64,16 @@ public:
         rhs.obj = nullptr;
     }
 
+/*DAO virtual stuff*/
+    virtual JSON getJSON () const {
+        JSON json;
+        json["type"] = obj->getCategory();
+        return json;
+
+    }
+    virtual void loadFromJSON (const JSON &json) {
+        string s = json["type"].toString();
+    }
 };
 
 #endif // DEEPPTR_H
