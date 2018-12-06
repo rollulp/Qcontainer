@@ -7,11 +7,14 @@
 class DAO
 {
 public:
-    static void setPath(const QString & s);
-    static QString getPath();
+    typedef QJsonObject JSON;
+    typedef QString string;
 
-    virtual QJsonObject getJSON () const = 0;
-    virtual void loadFromJSON (const QJsonObject &) = 0;
+    static void setPath(const string & s);
+    static string getPath();
+
+    virtual JSON getJSON () const = 0;
+    virtual void loadFromJSON (const JSON &) = 0;
 };
 
 #endif // DAO_H

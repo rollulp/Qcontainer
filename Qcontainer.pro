@@ -27,15 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     dao.cpp \
-    container_dao.cpp \
-    deepptr.cpp
+    dildo.cpp
 
 HEADERS += \
         mainwindow.h \
     dao.h \
     container.h \
     container_dao.h \
-    deepptr.h
+    deepptr.h \
+    dildo.h
 
 FORMS += \
         mainwindow.ui

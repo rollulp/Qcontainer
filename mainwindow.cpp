@@ -11,15 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    DAO::setPath("/home/studente/Desktop/a.dat");
-    size_t t = 30;
-    Container<int> list(t);
-    for(size_t i = 0; i < t; i++) {
-        list[i] = i;
-    }
+    DAO::setPath("/home/studente/Desktop/a");
+    Container<Dildo> list;
+    list.push_back(new DoubleDildo(1,1,1, Dildo::Color::RED, 2));
+    list.push_back(list[0].clone());
+    list.push_back(new ThermoDildo(13,2,2, Dildo::Color::RED,2,4));
     for(size_t i = 0; i < list.size(); i++)
-        cout << i << ": " << list[i] << endl;
-
+        cout << list[i].getCategory() << "\tprice: " << list[i].getPrice() << endl;
 }
 
 MainWindow::~MainWindow()
