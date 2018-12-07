@@ -16,6 +16,7 @@ public:
     static string getPath();
     static JSON loadFile();
     static void writeFile(const JSON &json);
+    static JSON string2json(const QString& s);
 
     virtual JSON getJSON () const = 0;
     virtual void loadFromJSON (const JSON &) = 0;

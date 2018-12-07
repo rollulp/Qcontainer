@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <type_traits>
 #include "deepptr.h"
+#include "myexception.h"
 
 template <typename T>
 class Container {
@@ -13,7 +14,7 @@ protected:
     DeepPtr<T>& getDeepPtr(size_t i) const {
         if(i < len)
             return data[i];
-        return data[0]; //TODO array index out of bounds ERR
+        throw MyException("ArrayIndexOutOfBounds");
     }
 public:
     Container() : data(new DeepPtr<T>[2*0]), len(0), reserved(2*0) {
@@ -50,8 +51,9 @@ public:
         delete [] data;
         data = tmp;
     }
-    template < typename U = T, typename std::enable_if< std::is_default_constructible<U>::value >::type >
-    void resize(size_t newsize) {
+    template < typename U = T>
+    typename std::enable_if< std::is_default_constructible<U>::value, void >::type
+    resize(size_t newsize) {
         if (newsize > reserved)
             reserve(newsize*2);
         for(size_t i = len; i < newsize; i++)
@@ -59,11 +61,18 @@ public:
         len = newsize;
 
     }
+    template < typename U = T>
+    typename std::enable_if< ! std::is_default_constructible<U>::value, void >::type
+    resize(size_t newsize) {
+        if (newsize > reserved)
+            reserve(newsize*2);
+        len = newsize;
+    }
     /* if is default constructible pass reference
      * to insert element
     */
     template < typename U = T>
-    typename std::enable_if< std::is_default_constructible<U>::value >::type
+    typename std::enable_if< std::is_default_constructible<U>::value, void >::type
     insert_into(const U& t, size_t n) {
         if (n > len)
             return; // TODO ERR
@@ -116,7 +125,7 @@ public:
     T& operator [] (size_t i) const {
         if(i < len)
             return data[i].get();
-        return data[0].get(); //TODO array index out of bounds ERR
+        throw MyException("ArrayIndexOutOfBounds");
     }
 };
 

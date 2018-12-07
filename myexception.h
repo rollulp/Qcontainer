@@ -1,13 +1,15 @@
 #ifndef MYEXCEPTION_H
 #define MYEXCEPTION_H
-#include <QString>
+#include <string>
+
+using std::string;
 
 class MyException
 {
-    const QString msg;
+    const string msg;
 public:
-    MyException(QString msg);
-    QString what() const;
+    MyException(string msg);
+    string what() const;
 };
 
 #endif // MYEXCEPTION_H

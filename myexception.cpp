@@ -1,9 +1,9 @@
 #include "myexception.h"
 
-MyException::MyException(QString msg)
+MyException::MyException(string msg)
     : msg(msg)
 {}
 
-QString MyException::what() const {
+string MyException::what() const {
     return msg;
 }

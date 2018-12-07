@@ -2,19 +2,19 @@
 
 const char Dildo::color_names[][10] = {"white", "black", "grey", "red", "pink", "orange", "yellow", "purple", "green", "blue", "silver", "gold"};
 
-Dildo::Dildo(unsigned int price, unsigned int weight, unsigned int length, Color color)
-    : price(price), diam(weight), length(length), color(color)
+Dildo::Dildo(int price, int weight, int length, Color color, string img64)
+    : price(price), diam(weight), length(length), color(color), img64(img64)
 {}
 Dildo::Dildo(const Dildo &dildo)
-    : Dildo(dildo.price, dildo.diam, dildo.length, dildo.color)
+    : Dildo(dildo.price, dildo.diam, dildo.length, dildo.color, dildo.img64)
 {}
-unsigned int Dildo::getPrice() const {
+int Dildo::getPrice() const {
     return price;
 }
-unsigned int Dildo::getDiam() const {
+int Dildo::getDiam() const {
     return diam;
 }
-unsigned int Dildo::getLength() const {
+int Dildo::getLength() const {
     return length;
 }
 const char* Dildo::getColorName() const {
@@ -23,17 +23,23 @@ const char* Dildo::getColorName() const {
 Dildo::Color Dildo::getColor() const {
     return color;
 }
-void Dildo::setPrice(unsigned int price) {
+Dildo::string Dildo::getImg() const {
+    return img64;
+}
+void Dildo::setPrice(int price) {
     this->price = price;
 }
-void Dildo::setDiam(unsigned int weight) {
+void Dildo::setDiam(int weight) {
     this->diam = weight;
 }
-void Dildo::setLength(unsigned int length) {
+void Dildo::setLength(int length) {
     this->length = length;
 }
 void Dildo::setColor(const Color& color) {
     this->color = color;
+}
+void Dildo::setImg(const string& img64) {
+    this->img64 = img64;
 }
 
 #define VIRTUAL_CHECK(CLASS, NAME) \
@@ -41,30 +47,32 @@ void Dildo::setColor(const Color& color) {
     const char* CLASS::getCategory() const { return category; } \
     Dildo* CLASS::clone() const { return new CLASS(*this); }
 
+VIRTUAL_CHECK(SimpleDildo, Simple Dildo)
 VIRTUAL_CHECK(DoubleDildo, Double Dildo)
 VIRTUAL_CHECK(ThermoDildo, Thermo Dildo)
+VIRTUAL_CHECK(InternalVibrator, Internal Vibrator)
 
 #undef VIRTUAL_CHECK
 
-DoubleDildo::DoubleDildo(unsigned int price, unsigned int diam, unsigned int length, Dildo::Color color, unsigned int diam_2)
-    : Dildo(price, diam, length, color), diam_2(diam_2)
+DoubleDildo::DoubleDildo(int price, int diam, int length, Dildo::Color color, string img64, int diam_2)
+    : Dildo(price, diam, length, color, img64), diam_2(diam_2)
 {}
 DoubleDildo::DoubleDildo(const DoubleDildo &dd)
-    : DoubleDildo(dd.getPrice(), dd.getDiam(), dd.getLength(), dd.getColor(), dd.diam_2)
+    : DoubleDildo(dd.getPrice(), dd.getDiam(), dd.getLength(), dd.getColor(), dd.getImg(), dd.diam_2)
 {}
-unsigned int DoubleDildo::getDiam2() const {
+int DoubleDildo::getDiam2() const {
     return diam_2;
 }
-void DoubleDildo::setDiam2(unsigned int diam_2) {
+void DoubleDildo::setDiam2(int diam_2) {
     this->diam_2 = diam_2;
 }
 
 
-ElectricDildo::ElectricDildo(unsigned int price, unsigned int diam, unsigned int length, Dildo::Color color, ElectricDildo::Watt watts)
-    : Dildo(price, diam, length, color), watts(watts)
+ElectricDildo::ElectricDildo(int price, int diam, int length, Dildo::Color color, string img64, ElectricDildo::Watt watts)
+    : Dildo(price, diam, length, color, img64), watts(watts)
 {}
 ElectricDildo::ElectricDildo(const ElectricDildo &ed)
-    : ElectricDildo(ed.getPrice(), ed.getDiam(), ed.getLength(), ed.getColor(), ed.watts)
+    : ElectricDildo(ed.getPrice(), ed.getDiam(), ed.getLength(), ed.getColor(), ed.getImg(), ed.watts)
 {}
 ElectricDildo::Watt ElectricDildo::getWatts() const {
     return watts;
@@ -73,15 +81,30 @@ void ElectricDildo::setWatts(Watt watts) {
     this->watts = watts;
 }
 
-ThermoDildo::ThermoDildo(unsigned int price, unsigned int diam, unsigned int length, Color color, Watt watts, Temp temp)
-    : ElectricDildo(price, diam, length, color, watts), temp(temp)
+
+ThermoDildo::ThermoDildo(int price, int diam, int length, Color color, string img64, Watt watts, Temp temp)
+    : Dildo(price, diam, length, color, img64), ElectricDildo(price, diam, length, color, img64, watts), temp(temp)
 {}
 ThermoDildo::ThermoDildo(const ThermoDildo &td) :
-    ThermoDildo(td.getPrice(), td.getDiam(), td.getLength(), td.getColor(), td.getWatts(), td.temp)
+    ThermoDildo(td.getPrice(), td.getDiam(), td.getLength(), td.getColor(), td.getImg(), td.getWatts(), td.temp)
 {}
 ThermoDildo::Temp ThermoDildo::getTemp() const {
     return temp;
 }
 void ThermoDildo::setTemp(Temp temp) {
     this->temp = temp;
+}
+
+
+InternalVibrator::InternalVibrator(int price, int diam, int length, Color color, string img64, Watt watts, Hertz frequency)
+    : Dildo(price, diam, length, color, img64), ElectricDildo(price, diam, length, color, img64, watts), frequency(frequency)
+{}
+InternalVibrator::InternalVibrator(const InternalVibrator &iv)
+    : InternalVibrator(iv.getPrice(), iv.getDiam(), iv.getLength(), iv.getColor(), iv.getImg(), iv.getWatts(), iv.frequency)
+{}
+InternalVibrator::Hertz InternalVibrator::getFrequency() const {
+    return frequency;
+}
+void InternalVibrator::setFrequency(Hertz frequency) {
+    this->frequency = frequency;
 }

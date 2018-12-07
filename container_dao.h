@@ -12,22 +12,22 @@ public:
     using Container<T>::Container;
 
     QJsonObject getJSON() const {
-        QJsonObject containerJSON;
-        QJsonArray dataJSON;
-        containerJSON["len"] = static_cast<int>(this->size());
+        QJsonObject json;
+        QJsonArray jsonArray;
+        json["len"] = static_cast<int>(this->size());
         for (size_t i = 0; i < this->size(); i++)
-            dataJSON.append( static_cast<DAO*>(&(this->getDeepPtr(i)))->getJSON() );
-        containerJSON["data"] = dataJSON;
-        return containerJSON;
+            jsonArray.append( static_cast<DAO*>(&(this->getDeepPtr(i)))->getJSON() );
+        json["data"] = jsonArray;
+        return json;
     }
 
     void loadFromJSON (const QJsonObject & json) {
-       size_t len = static_cast<size_t>(json["len"].toInt());
        QJsonArray array = json["data"].toArray();
-       if (array.size() != len)
+       if (array.size() != json["len"].toInt())
            throw MyException("JSON in an odd state, cannot read");
-//       for(size_t i = 0; i < len; i++)
-//           push_back(array[i].);
+       Container_DAO<T>::resize(array.size());
+       for(int i = 0; i < array.size(); i++)
+           static_cast<DAO*>(&(this->getDeepPtr(i)))->loadFromJSON(array[i].toObject());
     }
 };
 

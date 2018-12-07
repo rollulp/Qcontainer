@@ -1,55 +1,74 @@
 #ifndef DILDO_H
 #define DILDO_H
-#include "dao.h"
+
+// std::string rather than QString
+#include <string>
+using mystring = std::string;
 
 /*abstract*/
 class Dildo {
 public:
+    using string = mystring;
     enum Color { WHITE, BLACK, GREY, RED, PINK, ORANGE, YELLOW, PURPLE, GREEN, BLUE, SILVER, GOLD };
 private:
     static char const color_names[][10];
-    unsigned int price;
-    unsigned int diam;
-    unsigned int length;
+    int price;
+    int diam;
+    int length;
     Color color;
+    string img64;
 public:
 /*constructors & polymorphic stuff*/
-    Dildo(unsigned int price, unsigned int diam, unsigned int length, Color color);
+    Dildo(int price, int diam, int length, Color color, string img64);
     Dildo(const Dildo& dildo);
     // Base of Hierarchy virtual destructor
     virtual ~Dildo() {}
+
     // Dildo d = *(new Dildo); -> NO
     // Dildo* d = f.clone(); -> YES
     // breaks Rule Of Three! :)
     virtual Dildo& operator = (const Dildo&) = delete;
 
 /*getters and setters*/
-    unsigned int getPrice() const;
-    unsigned int getDiam() const;
-    unsigned int getLength() const;
+    int getPrice() const;
+    int getDiam() const;
+    int getLength() const;
     const char* getColorName() const;
     Color getColor() const;
-    void setPrice(unsigned int price);
-    void setDiam(unsigned int diam);
+    string getImg() const;
+    void setPrice(int price);
+    void setDiam(int diam);
     void setColor(const Color& color);
-    void setLength(unsigned int length);
+    void setLength(int length);
+    void setImg(const string& img64);
 
     virtual const char* getCategory() const = 0;
     virtual Dildo* clone() const = 0;
 };
 
 /*non abstract*/
-class DoubleDildo : public Dildo {
-private:
-    unsigned int diam_2;
+class SimpleDildo : public Dildo {
 public:
 /*constructors*/
-    DoubleDildo(unsigned int price, unsigned int diam, unsigned int length, Color color, unsigned int diam_2);
+    using Dildo::Dildo;
+
+/*virtual stuff*/
+        static const char * const category;
+        const char* getCategory() const;
+        Dildo* clone() const;
+};
+/*non abstract*/
+class DoubleDildo : public Dildo {
+private:
+    int diam_2;
+public:
+/*constructors*/
+    DoubleDildo(int price, int diam, int length, Color color, string img64, int diam_2);
     DoubleDildo(const DoubleDildo& dd);
 
 /*getters and setters*/
-    unsigned int getDiam2() const;
-    void setDiam2(unsigned int diam_2);
+    int getDiam2() const;
+    void setDiam2(int diam_2);
 
 /*virtual stuff*/
     static const char * const category;
@@ -58,14 +77,14 @@ public:
 };
 
 /*abstract*/
-class ElectricDildo : public Dildo {
+class ElectricDildo : virtual public Dildo {
 public:
-    typedef unsigned int Watt;
+    using Watt = int;
 private:
     Watt watts;
 public:
 /*constructors*/
-    ElectricDildo(unsigned int price, unsigned int diam, unsigned int length, Color color, Watt watts);
+    ElectricDildo(int price, int diam, int length, Color color, string img64, Watt watts);
     ElectricDildo(const ElectricDildo& ed);
 
 /*getters and setters*/
@@ -74,14 +93,14 @@ public:
 };
 
 /*non abstract*/
-class ThermoDildo : public ElectricDildo {
+class ThermoDildo : virtual public ElectricDildo {
 public:
-    typedef unsigned int Temp;
+    using Temp = int;
 private:
     Temp temp;
 public:
 /*constructors*/
-    ThermoDildo(unsigned int price, unsigned int diam, unsigned int length, Color color, Watt watts, Temp temp);
+    ThermoDildo(int price, int diam, int length, Color color, string img64, Watt watts, Temp temp);
     ThermoDildo(const ThermoDildo &td);
 
 /*getters and setters*/
@@ -95,16 +114,25 @@ public:
 };
 
 /*non abstract*/
-class InternalVibrator : public ElectricDildo {
-
+class InternalVibrator : virtual public ElectricDildo {
 public:
-    static const char * const category;
-    const char* getCategory() const {
-        return category;
-    }
-    Dildo* clone() const{
-        return new InternalVibrator(*this);
-    }
+    using Hertz = int;
+private:
+    Hertz frequency;
+public:
+/*constructors*/
+        InternalVibrator(int price, int diam, int length, Color color, string img64, Watt watts, Hertz frequency);
+        InternalVibrator(const InternalVibrator &iv);
+
+/*getters and setters*/
+        Hertz getFrequency() const;
+        void setFrequency(Hertz frequency);
+
+/*virtual stuff*/
+        static const char * const category;
+        const char* getCategory() const;
+        Dildo* clone() const;
+
 };
 
 

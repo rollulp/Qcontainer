@@ -29,3 +29,7 @@ void DAO::writeFile(const JSON &json) {
     document.setObject(json);
     jsonFile.write(document.toJson());
 }
+
+DAO::JSON DAO::string2json(const QString &s) {
+     return QJsonDocument().fromJson( s.toUtf8() ).object();
+}
