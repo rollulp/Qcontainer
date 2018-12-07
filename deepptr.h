@@ -100,6 +100,8 @@ public:
             obj = new ThermoDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "", json["watts"].toInt(), json["temp"].toInt());
         else if (d == InternalVibrator::category)
             obj = new InternalVibrator(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "", json["watts"].toInt(), json["freq"].toInt());
+        else if (d == DildoDeluxe::category)
+            obj = new DildoDeluxe(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "", json["watts"].toInt(), json["temp"].toInt(), json["freq"].toInt());
 
     }
 };

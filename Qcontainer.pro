@@ -37,7 +37,8 @@ HEADERS += \
     container_dao.h \
     deepptr.h \
     dildo.h \
-    myexception.h
+    myexception.h \
+    defaults.h
 
 FORMS += \
         mainwindow.ui

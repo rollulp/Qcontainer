@@ -51,6 +51,7 @@ VIRTUAL_CHECK(SimpleDildo, Simple Dildo)
 VIRTUAL_CHECK(DoubleDildo, Double Dildo)
 VIRTUAL_CHECK(ThermoDildo, Thermo Dildo)
 VIRTUAL_CHECK(InternalVibrator, Internal Vibrator)
+VIRTUAL_CHECK(DildoDeluxe, Dildo Deluxe)
 
 #undef VIRTUAL_CHECK
 
@@ -83,7 +84,7 @@ void ElectricDildo::setWatts(Watt watts) {
 
 
 ThermoDildo::ThermoDildo(int price, int diam, int length, Color color, string img64, Watt watts, Temp temp)
-    : Dildo(price, diam, length, color, img64), ElectricDildo(price, diam, length, color, img64, watts), temp(temp)
+    :  ElectricDildo(price, diam, length, color, img64, watts), temp(temp)
 {}
 ThermoDildo::ThermoDildo(const ThermoDildo &td) :
     ThermoDildo(td.getPrice(), td.getDiam(), td.getLength(), td.getColor(), td.getImg(), td.getWatts(), td.temp)
@@ -97,7 +98,7 @@ void ThermoDildo::setTemp(Temp temp) {
 
 
 InternalVibrator::InternalVibrator(int price, int diam, int length, Color color, string img64, Watt watts, Hertz frequency)
-    : Dildo(price, diam, length, color, img64), ElectricDildo(price, diam, length, color, img64, watts), frequency(frequency)
+    : ElectricDildo(price, diam, length, color, img64, watts), frequency(frequency)
 {}
 InternalVibrator::InternalVibrator(const InternalVibrator &iv)
     : InternalVibrator(iv.getPrice(), iv.getDiam(), iv.getLength(), iv.getColor(), iv.getImg(), iv.getWatts(), iv.frequency)
@@ -108,3 +109,14 @@ InternalVibrator::Hertz InternalVibrator::getFrequency() const {
 void InternalVibrator::setFrequency(Hertz frequency) {
     this->frequency = frequency;
 }
+
+DildoDeluxe::DildoDeluxe(int price, int diam, int length, Dildo::Color color, Dildo::string img64, ElectricDildo::Watt watts, InternalVibrator::Hertz frequency, Temp temp)
+    : ElectricDildo(price, diam, length, color, img64, watts),
+      ThermoDildo(price, diam, length, color, img64, watts, temp),
+      InternalVibrator(price, diam, length, color, img64, watts, frequency)
+{}
+DildoDeluxe::DildoDeluxe(const DildoDeluxe &ud)
+    : ElectricDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getWatts()),
+      ThermoDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getWatts(), ud.getWatts()),
+      InternalVibrator(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getWatts(), ud.getFrequency())
+{}
