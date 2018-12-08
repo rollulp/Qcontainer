@@ -90,7 +90,7 @@ public:
     typename std::enable_if< ! std::is_default_constructible<U>::value, void>::type
     insert_into(const T* t, size_t n) {
         if (n > len)
-            return; // TODO ERR
+            throw MyException("ArrayIndexOutOfBounds");
         if(len == reserved)
             reserve((len+1)*2);
         for(size_t i = len; i > n; i--)
@@ -100,7 +100,7 @@ public:
     }
     void delete_at(size_t n) {
         if (n >= len)
-            return; // TODO ERR
+            throw MyException("ArrayIndexOutOfBounds");
         len--;
         for(size_t i = n; i < len; i++) {
             data[i].eat(data[i+1]);
