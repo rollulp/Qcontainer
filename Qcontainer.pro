@@ -28,7 +28,8 @@ SOURCES += \
         mainwindow.cpp \
     dao.cpp \
     dildo.cpp \
-    myexception.cpp
+    myexception.cpp \
+    fileselector.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +39,9 @@ HEADERS += \
     deepptr.h \
     dildo.h \
     myexception.h \
-    defaults.h
+    defaults.h \
+    fileselector.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    fileselector.ui

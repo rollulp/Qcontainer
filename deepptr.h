@@ -93,15 +93,15 @@ public:
     virtual void loadFromJSON (const JSON &json) {
         DAO::string d = json["type"].toString();
         if (d == SimpleDildo::category)
-            obj = new SimpleDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "");
+            obj = new SimpleDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString());
         else if (d == DoubleDildo::category)
-            obj = new DoubleDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "", json["diam2"].toInt());
+            obj = new DoubleDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["diam2"].toInt());
         else if (d == ThermoDildo::category)
-            obj = new ThermoDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "", json["watts"].toInt(), json["temp"].toInt());
+            obj = new ThermoDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["watts"].toInt(), json["temp"].toInt());
         else if (d == InternalVibrator::category)
-            obj = new InternalVibrator(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "", json["watts"].toInt(), json["freq"].toInt());
+            obj = new InternalVibrator(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["watts"].toInt(), json["freq"].toInt());
         else if (d == DildoDeluxe::category)
-            obj = new DildoDeluxe(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), "", json["watts"].toInt(), json["temp"].toInt(), json["freq"].toInt());
+            obj = new DildoDeluxe(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["watts"].toInt(), json["temp"].toInt(), json["freq"].toInt());
 
     }
 };
