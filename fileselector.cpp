@@ -2,6 +2,7 @@
 #include "ui_fileselector.h"
 #include <QFileDialog>
 #include <QKeyEvent>
+#include <QDir>
 
 FileSelector::FileSelector(QWidget *parent) :
     QDialog(parent),
@@ -9,6 +10,7 @@ FileSelector::FileSelector(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Save file");
+    this->ui->lineEdit->setText(QDir::homePath() + "/QcontainerData.json");
 }
 
 FileSelector::~FileSelector()

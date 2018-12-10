@@ -29,7 +29,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit">
        <property name="text">
-        <string>/home/studente/Desktop/data.json</string>
+        <string>data.json</string>
        </property>
       </widget>
      </item>
