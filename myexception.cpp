@@ -4,6 +4,6 @@ MyException::MyException(string msg)
     : msg(msg)
 {}
 
-string MyException::what() const {
-    return msg;
+const char* MyException::what() const noexcept {
+    return msg.c_str();
 }

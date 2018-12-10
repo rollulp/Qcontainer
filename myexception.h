@@ -1,15 +1,16 @@
 #ifndef MYEXCEPTION_H
 #define MYEXCEPTION_H
 #include <string>
+#include <exception>
 
 using std::string;
 
-class MyException
+class MyException : public std::exception
 {
     const string msg;
 public:
     MyException(string msg);
-    string what() const;
+    const char* what() const noexcept;
 };
 
 #endif // MYEXCEPTION_H

@@ -21,8 +21,6 @@ public:
         return *this;
     }
 
-/*methods*/
-
 /*DAO virtual stuff*/
     virtual JSON getJSON () const {
         JSON json;
