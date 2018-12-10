@@ -40,7 +40,8 @@ HEADERS += \
     dildo.h \
     myexception.h \
     defaults.h \
-    fileselector.h
+    fileselector.h \
+    deeptr_dao_dildo.h
 
 FORMS += \
         mainwindow.ui \

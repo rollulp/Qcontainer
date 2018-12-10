@@ -3,6 +3,7 @@
 #include <type_traits>
 #include "container.h"
 #include "dao.h"
+#include "deeptr_dao_dildo.h"
 #include "myexception.h"
 
 template <typename T>
