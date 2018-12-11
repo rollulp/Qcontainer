@@ -1,20 +1,15 @@
 #include "mainwindow.h"
-#include "fileselector.h"
-#include "dao.h"
 #include <QApplication>
+#include <fileselector.h>
+#include "dao.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-
-    FileSelector *fileSelector = new FileSelector;
-    fileSelector->show();
-    if ( !a.exec() ) return 1;
-
-    DAO::setPath( fileSelector->getFilePath() );
-
-    delete fileSelector;
+    QString path = FileSelector::getPathFromUserInput();
+    if ( path == "@nopath@" ) return 1;
+    DAO::setPath( path );
 
     MainWindow w;
     w.show();

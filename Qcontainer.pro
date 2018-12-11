@@ -43,8 +43,8 @@ HEADERS += \
     myexception.h \
     defaults.h \
     fileselector.h \
-    deeptr_dao_dildo.h
+    deeptr_dao_dildo.h \
+    temp.h
 
 FORMS += \
-        mainwindow.ui \
-    fileselector.ui
+    temp.ui

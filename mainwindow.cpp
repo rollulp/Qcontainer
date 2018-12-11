@@ -1,30 +1,18 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "container_dao.h"
 #include "myexception.h"
 #include "defaults.h"
-#include <QDialog>
-
-#include<iostream>
-using namespace std;
-
+#include <QtCore>
+#include <QtWidgets>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QDialog(parent)
 {
-    ui->setupUi(this);
     setWindowTitle("Qildo - dildo storage");
 
-    Container_DAO<Dildo> list;
-    try {
-        list.loadFromJSON(DAO::loadFile());
-        //list.loadFromJSON(DAO::string2json(json_data));
-    } catch (MyException e) {
-        cerr << e.what() << endl;
-    }
+    loadDefault();
+
     for(size_t i = 0; i < list.size(); i++) {
-        cout << list[i].getCategory()
+        qDebug() << list[i].getCategory()
              << "\tprice: " << list[i].getPrice()
              << "\tcolor: " << list[i].getColorName()
              << "\tleng: " << list[i].getLength()
@@ -32,25 +20,50 @@ MainWindow::MainWindow(QWidget *parent) :
         if(auto ptr = dynamic_cast<SimpleDildo*>(&list[i]))
             (void)ptr; // no new fields
         else if(auto ptr = dynamic_cast<DoubleDildo*>(&list[i]))
-            cout << "\tdiam2: " << ptr->getDiam2();
+            qDebug() << "\tdiam2: " << ptr->getDiam2();
         else if(auto ptr = dynamic_cast<ElectricDildo*>(&list[i])) {
-            cout << "\twatts: " << ptr->getWatts();
+            qDebug() << "\twatts: " << ptr->getWatts();
             if(auto ptr2 = dynamic_cast<ThermoDildo*>(ptr))
-                cout << "\ttemp: " << ptr2->getTemp();
+                qDebug() << "\ttemp: " << ptr2->getTemp();
             if(auto ptr2 = dynamic_cast<InternalVibrator*>(ptr))
-                cout << "\tfreq: " << ptr2->getFrequency();
+                qDebug() << "\tfreq: " << ptr2->getFrequency();
         }
-        cout << "\timg: " << list[i].getImg().substr(0, 20) << endl;
+        qDebug() << "\timg: " << QString::fromStdString(list[i].getImg().substr(0, 20)) << '\n';
     }
 
+    QHBoxLayout * main = new QHBoxLayout(this);
+    QVBoxLayout *right = new QVBoxLayout; //  search and select
+    QVBoxLayout *left = new QVBoxLayout;
+    main->addLayout(left);
+    main->addLayout(right);
+
+    resize(800, 800);
+}
+
+void MainWindow::load() {
     try {
-        DAO::writeFile(list.getJSON());
+        list.loadFromJSON(DAO::loadFile());
     } catch (MyException e) {
-        cerr << e.what() << endl;
+        qDebug() << e.what() << '\n';
     }
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+void MainWindow::loadDefault() {
+    try {
+        list.loadFromJSON(DAO::string2json(json_data));
+    } catch (MyException e) {
+        qDebug() << e.what() << '\n';
+    }
+}
+
+void MainWindow::save() const {
+    try {
+        DAO::writeFile( list.getJSON() );
+    } catch (MyException e) {
+        qDebug() << e.what() << '\n';
+    }
+}
+
+MainWindow::~MainWindow() {
+
 }

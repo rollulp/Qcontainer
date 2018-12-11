@@ -2,29 +2,20 @@
 #define FILESELECTOR_H
 
 #include <QDialog>
+#include <QtCore>
+#include <QtWidgets>
 
-namespace Ui {
-class FileSelector;
-}
 
 class FileSelector : public QDialog
 {
     Q_OBJECT
+private:
+    QString &path;
+    FileSelector(QWidget *parent, QString& path);
 
 public:
-    explicit FileSelector(QWidget *parent = 0);
-    ~FileSelector();
+    static QString getPathFromUserInput();
 
-    QString getFilePath() const;
-    void keyPressEvent(QKeyEvent *e);
-
-private slots:
-    void on_pushButton_clicked();
-
-    void on_buttonBox_accepted();
-
-private:
-    Ui::FileSelector *ui;
 };
 
 #endif // FILESELECTOR_H

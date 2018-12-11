@@ -1,22 +1,26 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QDialog>
+#include "container_dao.h"
+#include "dildo.h"
 
-namespace Ui {
-class MainWindow;
-}
+class MainWindow : public QDialog {
 
-class MainWindow : public QMainWindow
-{
     Q_OBJECT
 
+    Container_DAO<Dildo> list;
+
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void save() const;
+    void load();
+
 private:
-    Ui::MainWindow *ui;
+    void loadDefault();
 };
 
 #endif // MAINWINDOW_H
