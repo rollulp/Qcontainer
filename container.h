@@ -43,6 +43,7 @@ public:
         return len;
     }
     void reserve(size_t newsize) {
+        //TODO si può migliorare
         reserved = newsize;
         len = ((newsize<len) ? (newsize) : (len));
         DeepPtr<T>* tmp = new DeepPtr<T>[reserved];

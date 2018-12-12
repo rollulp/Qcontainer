@@ -1,6 +1,6 @@
 #include "dildo.h"
 
-const char Dildo::color_names[][10] = {"white", "black", "grey", "red", "pink", "orange", "yellow", "purple", "green", "blue", "silver", "gold"};
+const char Dildo::color_names[12][7] = {"white", "black", "grey", "red", "pink", "orange", "yellow", "purple", "green", "blue", "silver", "gold"};
 
 Dildo::Dildo(int price, int weight, int length, Color color, string img64)
     : price(price), diam(weight), length(length), color(color), img64(img64)

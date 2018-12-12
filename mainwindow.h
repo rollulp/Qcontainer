@@ -4,12 +4,14 @@
 #include <QDialog>
 #include "container_dao.h"
 #include "dildo.h"
+#include "listselecter.h"
 
 class MainWindow : public QDialog {
 
     Q_OBJECT
 
     Container_DAO<Dildo> list;
+    ListSelecter* window2;
 
 public:
     MainWindow(QWidget *parent = 0);

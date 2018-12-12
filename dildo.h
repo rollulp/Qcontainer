@@ -10,8 +10,8 @@ class Dildo {
 public:
     using string = mystring;
     enum Color { WHITE, BLACK, GREY, RED, PINK, ORANGE, YELLOW, PURPLE, GREEN, BLUE, SILVER, GOLD };
+    static char const color_names[12][7];
 private:
-    static char const color_names[][10];
     int price;
     int diam;
     int length;
