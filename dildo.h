@@ -9,7 +9,7 @@ using mystring = std::string;
 class Dildo {
 public:
     using string = mystring;
-    enum Color { WHITE, BLACK, GREY, RED, PINK, ORANGE, YELLOW, PURPLE, GREEN, BLUE, SILVER, GOLD };
+    enum Color { WHITE = 1, BLACK = 2, GREY = 4, RED = 8, PINK = 16, ORANGE = 32, YELLOW = 64, PURPLE = 128, GREEN = 256, BLUE = 512, SILVER = 1024, GOLD = 2048 };
     static char const color_names[12][7];
 private:
     int price;

@@ -2,168 +2,203 @@
 #include "dildo.h"
 
 ListSelecter::ListSelecter(QWidget *parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      cb_simple(new QCheckBox("Simple")),
+      cb_double(new QCheckBox("Double")),
+      cb_thermo(new QCheckBox("Thermo")),
+      cb_vibrator(new QCheckBox("Vibrating")),
+      cb_deluxe(new QCheckBox("Deluxe")),
+      colorChoiceDropDown(new QComboBox),
+      h_price(new MyHLayout("price")),
+      h_len(new MyHLayout("len")),
+      h_diam(new MyHLayout("diam")),
+      h_diam2(new MyHLayout("diam2")),
+      h_watt(new MyHLayout("watt")),
+      h_freq(new MyHLayout("freq")),
+      h_temp(new MyHLayout("temp"))
 {
     this->setWindowTitle("Qildo selecter");
     QVBoxLayout * layout = new QVBoxLayout(this);
 
-    grid = new QGridLayout;
-    grid->setContentsMargins(15, 15, 15, 15);
+    //grid
 
+    QGridLayout *grid = new QGridLayout;
+    grid->setContentsMargins(15, 15, 15, 15);
     layout->addLayout(grid);
 
     //part1
-    QLabel *label = new QLabel;
-    label->setText("Choose types :");
-    grid->addWidget(label, 0, 0, 1, 1);
 
-    QCheckBox *cb1 = new QCheckBox;
-    cb1->setText("Simple");
-    grid->addWidget(cb1, 0, 3, 1, 1);
+    cb_simple->setChecked(true);
+    cb_double->setChecked(true);
+    cb_thermo->setChecked(true);
+    cb_vibrator->setChecked(true);
+    cb_deluxe->setChecked(true);
+    grid->addWidget(new QLabel("Choose types :"), 0, 0, 1, 1);
+    grid->addWidget(cb_simple, 0, 3, 1, 1);
+    grid->addWidget(cb_double, 1, 2, 1, 1);
+    grid->addWidget(cb_thermo, 1, 3, 1, 1);
+    grid->addWidget(cb_vibrator, 2, 2, 1, 1);
+    grid->addWidget(cb_deluxe, 2, 3, 1, 1);
 
-    QCheckBox *cb2 = new QCheckBox;
-    cb2->setText("Double");
-    grid->addWidget(cb2, 1, 2, 1, 1);
-
-    QCheckBox *cb3 = new QCheckBox;
-    cb3->setText("Thermo");
-    grid->addWidget(cb3, 1, 3, 1, 1);
-
-    QCheckBox *cb4 = new QCheckBox;
-    cb4->setText("Vibrating");
-    grid->addWidget(cb4, 2, 2, 1, 1);
-
-    QCheckBox *cb5 = new QCheckBox;
-    cb5->setText("Deluxe");
-    grid->addWidget(cb5, 2, 3, 1, 1);
+    connect(cb_simple, SIGNAL(stateChanged(int)), this, SLOT(enabledisablelayouts(int)));
+    connect(cb_double, SIGNAL(stateChanged(int)), this, SLOT(enabledisablelayouts(int)));
+    connect(cb_thermo, SIGNAL(stateChanged(int)), this, SLOT(enabledisablelayouts(int)));
+    connect(cb_vibrator, SIGNAL(stateChanged(int)), this, SLOT(enabledisablelayouts(int)));
+    connect(cb_deluxe, SIGNAL(stateChanged(int)), this, SLOT(enabledisablelayouts(int)));
 
     //part2
 
-    label = new QLabel;
-    label->setText("By color :");
-    grid->addWidget(label, 3, 0, 1, 1);
-
-    QComboBox *colorChoiceDropDown = new QComboBox;
+    grid->addWidget(new QLabel("By color :"), 3, 0, 1, 1);
     colorChoiceDropDown->addItem("All");
     for(size_t i = 0; i < sizeof(Dildo::color_names)/sizeof(*Dildo::color_names); i++)
         colorChoiceDropDown->addItem(Dildo::color_names[i]);
     grid->addWidget(colorChoiceDropDown, 3, 2, 1, 2);
 
-    //part3.1
+    //part3
 
-    label = new QLabel;
-    label->setText("By values :");
-    grid->addWidget(label, 4, 0, 1, 1);
+    layout->addLayout(h_price);
+    layout->addLayout(h_len);
+    layout->addLayout(h_diam);
+    layout->addLayout(h_diam2);
+    layout->addLayout(h_watt);
+    layout->addLayout(h_freq);
+    layout->addLayout(h_temp);
+    enabledisablelayouts(0);
 
-    label = new QLabel;
-    label->setText("min");
-    grid->addWidget(label, 4, 2, 1, 1);
-
-    label = new QLabel;
-    label->setText("max");
-    grid->addWidget(label, 4, 3, 1, 1);
-
-    //part3.2
-    QRegExpValidator * validator = new QRegExpValidator(QRegExp("\\d*"), this);
-
-    QSpinBox *lineEdit_2 = new QSpinBox;
-    lineEdit_2->setValue(1);
-    grid->addWidget(lineEdit_2, 5, 3, 1, 1);
-
-    label = new QLabel;
-    label->setText("meters");
-    grid->addWidget(label, 5, 4, 1, 1);
-
-    QLabel *label_13 = new QLabel;
-    label_13->setText("label_13");
-    grid->addWidget(label_13, 9, 4, 1, 1);
-
-    QSpinBox *lineEdit = new QSpinBox;
-    lineEdit->setValue(2);
-    grid->addWidget(lineEdit, 5, 1, 1, 2);
-
-    QCheckBox *checkBox_6 = new QCheckBox;
-    checkBox_6->setText("checkBox_6");
-    grid->addWidget(checkBox_6, 5, 0, 1, 1);
-
-    QSpinBox *lineEdit_9 = new QSpinBox;
-    lineEdit_9->setValue(3);
-    grid->addWidget(lineEdit_9, 9, 3, 1, 1);
-
-    QSpinBox *lineEdit_8 = new QSpinBox;
-    lineEdit_8->setValue(4);
-    grid->addWidget(lineEdit_8, 8, 3, 1, 1);
-
-    QCheckBox *checkBox_9 = new QCheckBox;
-    checkBox_9->setText("checkBox_9");
-    grid->addWidget(checkBox_9, 8, 0, 1, 1);
-
-    QSpinBox *lineEdit_5 = new QSpinBox;
-    lineEdit_5->setValue(5);
-    grid->addWidget(lineEdit_5, 7, 3, 1, 1);
-
-    QCheckBox *checkBox_8 = new QCheckBox;
-    checkBox_8->setText("checkBox_8");
-    grid->addWidget(checkBox_8, 7, 0, 1, 1);
-
-    QLabel *label_5 = new QLabel;
-    label_5->setText("label_5");
-    grid->addWidget(label_5, 6, 4, 1, 1);
-
-    QSpinBox *lineEdit_6 = new QSpinBox;
-    lineEdit_6->setValue(6);
-    grid->addWidget(lineEdit_6, 8, 1, 1, 2);
-
-    QSpinBox *lineEdit_15 = new QSpinBox;
-    lineEdit_15->setValue(7);
-    grid->addWidget(lineEdit_15, 9, 1, 1, 2);
-
-    QLabel *label_10 = new QLabel;
-    label_10->setText("label_10");
-    grid->addWidget(label_10, 8, 4, 1, 1);
-
-    QCheckBox *checkBox_10 = new QCheckBox;
-    checkBox_10->setText("checkBox_10");
-    grid->addWidget(checkBox_10, 9, 0, 1, 1);
-
-    QCheckBox *checkBox_13 = new QCheckBox;
-    checkBox_13->setText("checkBox_13");
-    grid->addWidget(checkBox_13, 10, 0, 1, 1);
-
-    QSpinBox *lineEdit_7 = new QSpinBox;
-    lineEdit_7->setValue(12);
-    grid->addWidget(lineEdit_7, 7, 1, 1, 2);
-
-    QLabel *label_8 = new QLabel;
-    label_8->setText("label_8");
-    grid->addWidget(label_8, 10, 4, 1, 1);
-
-    QLabel *label_9 = new QLabel;
-    label_9->setText("label_9");
-    grid->addWidget(label_9, 7, 4, 1, 1);
-
-    QCheckBox *checkBox_7 = new QCheckBox;
-    checkBox_7->setText("checkBox_7");
-    grid->addWidget(checkBox_7, 6, 0, 1, 1);
-
-    QSpinBox *lineEdit_4 = new QSpinBox;
-    lineEdit_4->setValue(8);
-    grid->addWidget(lineEdit_4, 6, 1, 1, 2);
-
-    QSpinBox *lineEdit_3 = new QSpinBox;
-    lineEdit_3->setValue(9);
-    grid->addWidget(lineEdit_3, 6, 3, 1, 1);
-
-    QSpinBox *lineEdit_10 = new QSpinBox;
-    lineEdit_10->setValue(10);
-    grid->addWidget(lineEdit_10, 10, 1, 1, 2);
-
-    QSpinBox *lineEdit_16 = new QSpinBox;
-    lineEdit_16->setValue(11);
-    grid->addWidget(lineEdit_16, 10, 3, 1, 1);
+    //part4
 
     QDialogButtonBox *ok = new QDialogButtonBox;
     ok->setOrientation(Qt::Horizontal);
     ok->setStandardButtons(QDialogButtonBox::Apply);
     layout->addWidget(ok);
+}
+
+void ListSelecter::enabledisablelayouts(int) {
+    //h_price, h_len, h_diam always enabled
+    h_len->on();
+    h_price->on();
+    h_diam->on();
+    h_diam2->off();
+    h_watt->off();
+    h_freq->off();
+    h_temp->off();
+    if (cb_simple->isChecked() || cb_double->isChecked()) {
+        if ( ! (cb_simple->isChecked() || cb_thermo->isChecked() || cb_vibrator->isChecked() || cb_deluxe->isChecked()) )
+            h_diam2->on();
+        return;
+    }
+    if (cb_thermo->isChecked() || cb_vibrator->isChecked() || cb_deluxe->isChecked())
+        h_watt->on();
+    if (cb_thermo->isChecked() and ! cb_vibrator->isChecked()) {
+        h_temp->on();
+        return;
+    }
+    if (cb_vibrator->isChecked() and ! cb_thermo->isChecked()) {
+        h_freq->on();
+        return;
+    }
+    if ( (cb_vibrator->isChecked() and cb_thermo->isChecked()) || cb_deluxe->isChecked() ) {
+        h_freq->on();
+        h_temp->on();
+        return;
+    }
+    //no Dildos
+    h_len->off();
+    h_price->off();
+    h_diam->off();
+}
+
+SearchValidator ListSelecter::getValidator() const {
+
+    using Category = SearchValidator::Category;
+
+    SearchValidator::AttributeBoundaries bounds;
+    bounds.categoryBitMap = 0;
+    if ( cb_simple->isChecked() )
+        bounds.categoryBitMap |= Category::SimpleDildo;
+    if ( cb_double->isChecked() )
+        bounds.categoryBitMap |= Category::DoubleDildo;
+    if ( cb_thermo->isChecked() )
+        bounds.categoryBitMap |= Category::ThermoDildo;
+    if ( cb_vibrator->isChecked() )
+        bounds.categoryBitMap |= Category::InternalVibrator;
+    if ( cb_deluxe->isChecked() )
+        bounds.categoryBitMap |= Category::DildoDeluxe;
+
+    //color
+    if (int i = colorChoiceDropDown->currentIndex() )
+        bounds.colorCheck = (bounds.color = static_cast<Dildo::Color>( 1 << (i-1) ));
+
+    //attributes
+    if ((bounds.len = h_len->isApplicableBound())) {
+        bounds.lenmin = h_len->getMin();
+        bounds.lenmax = h_len->getMax();
+    }
+    if ((bounds.price = h_price->isApplicableBound())) {
+        bounds.pricemin = h_price->getMin();
+        bounds.pricemax = h_price->getMax();
+    }
+    if ((bounds.diam = h_diam->isApplicableBound())) {
+        bounds.diammin = h_diam->getMin();
+        bounds.diammax = h_diam->getMax();
+    }
+    if ((bounds.diam2 = h_diam2->isApplicableBound())) {
+        bounds.diam2min = h_diam2->getMin();
+        bounds.diam2max = h_diam2->getMax();
+        goto after_attributes;
+    }
+    if ((bounds.watt = h_watt->isApplicableBound())) {
+        bounds.wattmin = h_watt->getMin();
+        bounds.wattmax = h_watt->getMax();
+    }
+    if ((bounds.freq = h_freq->isApplicableBound())) {
+        bounds.freqmin = h_freq->getMin();
+        bounds.freqmax = h_freq->getMax();
+    }
+    if ((bounds.temp = h_temp->isApplicableBound())) {
+        bounds.tempmin = h_temp->getMin();
+        bounds.tempmax = h_temp->getMax();
+    }
+
+    after_attributes:
+
+    return SearchValidator(bounds);
+}
+
+MyHLayout::MyHLayout(QString label, QWidget *parent)
+    : QHBoxLayout(parent),
+      checkbox(new QCheckBox(label)),
+      min(new QSpinBox),
+      max(new QSpinBox)
+{
+    addWidget(checkbox);
+    addWidget(min);
+    addWidget(new QLabel(" < value < "));
+    addWidget(max);
+    connect(min, &QSpinBox::editingFinished, [this]()->void{
+                if (this->min->value() > this->max->value())
+                this->max->setValue(this->min->value());
+            });
+}
+
+void MyHLayout::on() const {
+    checkbox->setEnabled(true);
+    min->setEnabled(true);
+    max->setEnabled(true);
+}
+
+void MyHLayout::off() const {
+    checkbox->setEnabled(false);
+    min->setEnabled(false);
+    max->setEnabled(false);
+}
+
+bool MyHLayout::isApplicableBound() const {
+    return checkbox->isEnabled() && checkbox->isChecked();
+}
+int MyHLayout::getMin() const {
+    return min->value();
+}
+int MyHLayout::getMax() const {
+    return max->value();
 }

@@ -21,7 +21,6 @@ public:
         /*se voglio generare un Container<T> dove
         * (is_default_constructible<T>::value == false)
         * non posso generare un metodo con (data[i] = new T)
-        * nemmeno se (new T) non esegue mai.
         * In questo modo Container<T> si comporta con std::vector<T> per la costruzione,
         * mantenendo gli standard STL.
         */
