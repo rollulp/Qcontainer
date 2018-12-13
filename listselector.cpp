@@ -1,7 +1,7 @@
-#include "listselecter.h"
+#include "listselector.h"
 #include "dildo.h"
 
-ListSelecter::ListSelecter(QWidget *parent)
+ListSelector::ListSelector(QWidget *parent)
     : QDialog(parent),
       cb_simple(new QCheckBox("Simple")),
       cb_double(new QCheckBox("Double")),
@@ -73,7 +73,7 @@ ListSelecter::ListSelecter(QWidget *parent)
     layout->addWidget(ok);
 }
 
-void ListSelecter::enabledisablelayouts(int) {
+void ListSelector::enabledisablelayouts(int) {
     //h_price, h_len, h_diam always enabled
     h_len->on();
     h_price->on();
@@ -108,7 +108,7 @@ void ListSelecter::enabledisablelayouts(int) {
     h_diam->off();
 }
 
-SearchValidator ListSelecter::getValidator() const {
+SearchValidator ListSelector::getValidator() const {
 
     using Category = SearchValidator::Category;
 

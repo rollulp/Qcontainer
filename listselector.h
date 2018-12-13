@@ -9,13 +9,13 @@
 
 class MyHLayout;
 
-class ListSelecter : public QDialog {
+class ListSelector : public QDialog {
     Q_OBJECT
     QCheckBox *cb_simple, *cb_double, *cb_thermo, *cb_vibrator, *cb_deluxe;
     QComboBox *colorChoiceDropDown;
     MyHLayout *h_price, *h_len, *h_diam, *h_diam2, *h_watt, *h_freq, *h_temp;
 public:
-    ListSelecter(QWidget *parent);
+    ListSelector(QWidget *parent);
     SearchValidator getValidator() const;
 public slots:
     void enabledisablelayouts(int);

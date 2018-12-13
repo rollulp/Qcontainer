@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setWindowTitle("Qildo - dildo storage");
 
-    window2 = new ListSelecter(this);
+    window2 = new ListSelector(this);
     window2->show();
 
     loadDefault();

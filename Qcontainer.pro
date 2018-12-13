@@ -32,8 +32,8 @@ SOURCES += \
     dildo.cpp \
     myexception.cpp \
     fileselector.cpp \
-    listselecter.cpp \
-    searchvalidator.cpp
+    searchvalidator.cpp \
+    listselector.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,7 +46,7 @@ HEADERS += \
     defaults.h \
     fileselector.h \
     deeptr_dao_dildo.h \
-    listselecter.h \
-    searchvalidator.h
+    searchvalidator.h \
+    listselector.h
 
 FORMS +=

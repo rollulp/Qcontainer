@@ -28,6 +28,6 @@ bool SearchValidator::operator()(const Dildo &dildo) const {
     const Category category = getCategory(dildo);
     if (category^bounds.categoryBitMap)
         return false;
-    // TODO only checks for cathegory so far!
+    // TODO only checks for category so far!
     return true;
 }
