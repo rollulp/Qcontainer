@@ -10,12 +10,15 @@ class MainWindow : public QDialog {
 
     Q_OBJECT
 
+    QVBoxLayout *main;
     Container_DAO<Dildo> list;
     ListSelector* window2;
 
 public:
     MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+
+public slots:
+    void get_and_apply_validator();
 
 private slots:
     void save() const;

@@ -21,16 +21,10 @@ public:
         int pricemin, pricemax;
         bool diam;
         int diammin, diammax;
-        union {
-            struct {
-                bool diam2;
-                int diam2min, diam2max;
-            };
-            struct {
-                bool watt;
-                int wattmin, wattmax;
-            };
-        };
+        bool diam2;
+        int diam2min, diam2max;
+        bool watt;
+        int wattmin, wattmax;
         bool freq;
         int freqmin, freqmax;
         bool temp;

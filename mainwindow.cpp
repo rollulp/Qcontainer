@@ -4,18 +4,29 @@
 #include <QtCore>
 #include <QtWidgets>
 
+#include <QDebug>
+#include <iostream>
+using namespace std;
+
+#include "searchvalidator.h"
+
 MainWindow::MainWindow(QWidget *parent) :
-    QDialog(parent)
+    QDialog(parent),
+    main(new QVBoxLayout(this)),
+    window2(new ListSelector(this))
 {
     setWindowTitle("Qildo - dildo storage");
 
-    window2 = new ListSelector(this);
-    window2->show();
-
     loadDefault();
+    resize(800, 800);
 
+    QPushButton *win2btn = new QPushButton("Change search params");
+    connect(win2btn, &QPushButton::clicked, [this]() { this->window2->show(); });
+    main->addWidget(win2btn);
+
+#define cqDebug() cout
     for(size_t i = 0; i < list.size(); i++) {
-        qDebug() << list[i].getCategory()
+        cqDebug() << list[i].getCategory()
              << "\tprice: " << list[i].getPrice()
              << "\tcolor: " << list[i].getColorName()
              << "\tleng: " << list[i].getLength()
@@ -23,24 +34,17 @@ MainWindow::MainWindow(QWidget *parent) :
         if(auto ptr = dynamic_cast<SimpleDildo*>(&list[i]))
             (void)ptr; // no new fields
         else if(auto ptr = dynamic_cast<DoubleDildo*>(&list[i]))
-            qDebug() << "\tdiam2: " << ptr->getDiam2();
+            cqDebug() << "\tdiam2: " << ptr->getDiam2();
         else if(auto ptr = dynamic_cast<ElectricDildo*>(&list[i])) {
-            qDebug() << "\twatts: " << ptr->getWatts();
+            cqDebug() << "\twatts: " << ptr->getWatts();
             if(auto ptr2 = dynamic_cast<ThermoDildo*>(ptr))
-                qDebug() << "\ttemp: " << ptr2->getTemp();
+                cqDebug() << "\ttemp: " << ptr2->getTemp();
             if(auto ptr2 = dynamic_cast<InternalVibrator*>(ptr))
-                qDebug() << "\tfreq: " << ptr2->getFrequency();
+                cqDebug() << "\tfreq: " << ptr2->getFrequency();
         }
-        qDebug() << "\timg: " << QString::fromStdString(list[i].getImg().substr(0, 20)) << '\n';
+        cqDebug() << "\timg: " << (list[i].getImg().substr(0, 20)) << endl;
     }
 
-    QHBoxLayout * main = new QHBoxLayout(this);
-    QVBoxLayout *right = new QVBoxLayout; //  search and select
-    QVBoxLayout *left = new QVBoxLayout;
-    main->addLayout(left);
-    main->addLayout(right);
-
-    resize(800, 800);
 }
 
 void MainWindow::load() {
@@ -67,6 +71,12 @@ void MainWindow::save() const {
     }
 }
 
-MainWindow::~MainWindow() {
+void MainWindow::get_and_apply_validator() {
 
+    // TODO apply to model new data
+
+    //SearchValidator validate = window2->getValidator();
+    //for (size_t i = 0; i < list.size(); i++)
+    //    if ( validate(list[i]) )
+    return;
 }

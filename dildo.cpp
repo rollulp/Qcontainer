@@ -1,10 +1,14 @@
 #include "dildo.h"
+#include "myexception.h"
 
 const char Dildo::color_names[12][7] = {"white", "black", "grey", "red", "pink", "orange", "yellow", "purple", "green", "blue", "silver", "gold"};
 
 Dildo::Dildo(int price, int weight, int length, Color color, string img64)
     : price(price), diam(weight), length(length), color(color), img64(img64)
-{}
+{
+    if (price < 0 || diam < 0 || length < 0 || color < 0 || color > GOLD)
+        throw MyException("invalid dildo contruction");
+}
 Dildo::Dildo(const Dildo &dildo)
     : Dildo(dildo.price, dildo.diam, dildo.length, dildo.color, dildo.img64)
 {}

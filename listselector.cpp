@@ -69,12 +69,13 @@ ListSelector::ListSelector(QWidget *parent)
 
     QDialogButtonBox *ok = new QDialogButtonBox;
     ok->setOrientation(Qt::Horizontal);
-    ok->setStandardButtons(QDialogButtonBox::Apply);
+    ok->setStandardButtons(QDialogButtonBox::Ok);
     layout->addWidget(ok);
+    connect(ok, SIGNAL(accepted()), parent, SLOT(get_and_apply_validator()));
 }
 
 void ListSelector::enabledisablelayouts(int) {
-    //h_price, h_len, h_diam always enabled
+    //TODO funziona ma devo riscriverla meglio è inguardabile
     h_len->on();
     h_price->on();
     h_diam->on();
@@ -97,11 +98,13 @@ void ListSelector::enabledisablelayouts(int) {
         h_freq->on();
         return;
     }
-    if ( (cb_vibrator->isChecked() and cb_thermo->isChecked()) || cb_deluxe->isChecked() ) {
+    if ( !cb_vibrator->isChecked() and !cb_thermo->isChecked() and cb_deluxe->isChecked() ) {
         h_freq->on();
         h_temp->on();
         return;
     }
+    if (cb_vibrator->isChecked() and cb_thermo->isChecked())
+        return;
     //no Dildos
     h_len->off();
     h_price->off();
@@ -127,7 +130,7 @@ SearchValidator ListSelector::getValidator() const {
 
     //color
     if (int i = colorChoiceDropDown->currentIndex() )
-        bounds.colorCheck = (bounds.color = static_cast<Dildo::Color>( 1 << (i-1) ));
+        bounds.colorCheck = (bounds.color = static_cast<Dildo::Color>( i ));
 
     //attributes
     if ((bounds.len = h_len->isApplicableBound())) {
@@ -145,7 +148,6 @@ SearchValidator ListSelector::getValidator() const {
     if ((bounds.diam2 = h_diam2->isApplicableBound())) {
         bounds.diam2min = h_diam2->getMin();
         bounds.diam2max = h_diam2->getMax();
-        goto after_attributes;
     }
     if ((bounds.watt = h_watt->isApplicableBound())) {
         bounds.wattmin = h_watt->getMin();
@@ -160,8 +162,6 @@ SearchValidator ListSelector::getValidator() const {
         bounds.tempmax = h_temp->getMax();
     }
 
-    after_attributes:
-
     return SearchValidator(bounds);
 }
 
@@ -175,10 +175,12 @@ MyHLayout::MyHLayout(QString label, QWidget *parent)
     addWidget(min);
     addWidget(new QLabel(" < value < "));
     addWidget(max);
-    connect(min, &QSpinBox::editingFinished, [this]()->void{
+    auto minmaxlambda = [this]()->void{
                 if (this->min->value() > this->max->value())
                 this->max->setValue(this->min->value());
-            });
+            };
+    connect(min, &QSpinBox::editingFinished, minmaxlambda);
+    connect(max, &QSpinBox::editingFinished, minmaxlambda);
 }
 
 void MyHLayout::on() const {
