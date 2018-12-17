@@ -4,6 +4,7 @@
 #include <type_traits>
 #include "deepptr.h"
 #include "myexception.h"
+#include "validator.h"
 
 template <typename T>
 class Container {
@@ -126,6 +127,36 @@ public:
         if(i < len)
             return data[i].get();
         throw MyException("ArrayIndexOutOfBounds");
+    }
+
+
+    class Stream {
+        const Container<T>* super;
+        const Validator<T>* validate;
+        size_t i;
+
+        //private constructor, friended Container<T>
+        friend Stream Container<T>::getStream(Validator<T>*);
+        Stream(const Container<T>* super, Validator<T>* validate)
+            : super(super), validate(validate), i(0) {}
+    public:
+        T* getNext() {
+            for(; i<super->size(); i++) {
+                if (! (*validate)((*super)[i]) )
+                    continue;
+                return &((*super)[i++]);
+            }
+            return nullptr;
+        }
+        void reset() {
+            i = 0;
+        }
+        ~Stream() {
+        }
+    };
+
+    Stream getStream(Validator<T>* validate) {
+        return Stream(this, validate);
     }
 };
 

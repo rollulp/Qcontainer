@@ -16,7 +16,7 @@ class ListSelector : public QDialog {
     MyHLayout *h_price, *h_len, *h_diam, *h_diam2, *h_watt, *h_freq, *h_temp;
 public:
     ListSelector(QWidget *parent);
-    SearchValidator getValidator() const;
+    SearchValidator *getValidator() const;
 public slots:
     void enabledisablelayouts(int);
 };

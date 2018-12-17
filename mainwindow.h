@@ -10,7 +10,7 @@ class MainWindow : public QDialog {
 
     Q_OBJECT
 
-    QVBoxLayout *main;
+    QListView *listView;
     Container_DAO<Dildo> list;
     ListSelector* window2;
 

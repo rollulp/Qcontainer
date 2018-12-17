@@ -47,6 +47,7 @@ HEADERS += \
     fileselector.h \
     deeptr_dao_dildo.h \
     searchvalidator.h \
-    listselector.h
+    listselector.h \
+    validator.h
 
 FORMS +=

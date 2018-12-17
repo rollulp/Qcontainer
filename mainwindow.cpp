@@ -12,18 +12,21 @@ using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
-    main(new QVBoxLayout(this)),
     window2(new ListSelector(this))
 {
     setWindowTitle("Qildo - dildo storage");
-
-    loadDefault();
+    QVBoxLayout *main = new QVBoxLayout(this);
     resize(800, 800);
 
-    QPushButton *win2btn = new QPushButton("Change search params");
-    connect(win2btn, &QPushButton::clicked, [this]() { this->window2->show(); });
-    main->addWidget(win2btn);
+    loadDefault();
 
+
+
+    QPushButton *open_window2 = new QPushButton("Change search params");
+    connect(open_window2, &QPushButton::clicked, [this] (bool) { this->window2->show(); });
+    main->addWidget(open_window2);
+
+    ///////////////////////////////////////
 #define cqDebug() cout
     for(size_t i = 0; i < list.size(); i++) {
         cqDebug() << list[i].getCategory()
@@ -75,8 +78,14 @@ void MainWindow::get_and_apply_validator() {
 
     // TODO apply to model new data
 
-    //SearchValidator validate = window2->getValidator();
-    //for (size_t i = 0; i < list.size(); i++)
-    //    if ( validate(list[i]) )
+    Container<Dildo>::Stream stream = list.getStream(window2->getValidator());
+    cqDebug() << "init search" << endl;
+    try {
+        int i = 0;
+        while (const Dildo* d = stream.getNext()) {
+            cqDebug() << ++i << (": ") << d->getCategory() << endl;;
+        }
+    } catch (MyException) {}
+    cout << "end search" << endl;
     return;
 }

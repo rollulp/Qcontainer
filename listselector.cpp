@@ -111,7 +111,7 @@ void ListSelector::enabledisablelayouts(int) {
     h_diam->off();
 }
 
-SearchValidator ListSelector::getValidator() const {
+SearchValidator* ListSelector::getValidator() const {
 
     using Category = SearchValidator::Category;
 
@@ -131,6 +131,8 @@ SearchValidator ListSelector::getValidator() const {
     //color
     if (int i = colorChoiceDropDown->currentIndex() )
         bounds.colorCheck = (bounds.color = static_cast<Dildo::Color>( i ));
+    else
+        bounds.colorCheck = false;
 
     //attributes
     if ((bounds.len = h_len->isApplicableBound())) {
@@ -162,7 +164,7 @@ SearchValidator ListSelector::getValidator() const {
         bounds.tempmax = h_temp->getMax();
     }
 
-    return SearchValidator(bounds);
+    return new SearchValidator(bounds);
 }
 
 MyHLayout::MyHLayout(QString label, QWidget *parent)

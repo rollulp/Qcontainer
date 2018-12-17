@@ -25,6 +25,7 @@ static inline bool is_outside_range(const bool check, int min, int val, int max)
     return check && (val < min || val > max);
 }
 bool SearchValidator::operator()(const Dildo &dildo) const {
+
     const Category category = getCategory(dildo);
     if (!(category&bounds.categoryBitMap))
         return false;
@@ -47,5 +48,6 @@ bool SearchValidator::operator()(const Dildo &dildo) const {
     if (  ( category==InternalVibrator || category==DildoDeluxe) &&
           is_outside_range(bounds.freq, bounds.freqmin, dynamic_cast<const ::InternalVibrator&>(dildo).getFrequency(), bounds.freqmax) )
         return false;
+
     return true;
 }

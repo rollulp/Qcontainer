@@ -1,8 +1,9 @@
 #ifndef SEARCHVALIDATOR_H
 #define SEARCHVALIDATOR_H
 #include "dildo.h"
+#include "validator.h"
 
-class SearchValidator {
+class SearchValidator : public Validator<Dildo> {
 public:
     enum Category {
         SimpleDildo = 1 << 0,
@@ -32,7 +33,7 @@ public:
 
     } bounds;
     SearchValidator(const AttributeBoundaries &boundaries);
-    bool operator() (const Dildo &dildo) const;
+    bool operator() (const Dildo &dildo) const override;
 };
 
 #endif // SEARCHVALIDATOR_H
