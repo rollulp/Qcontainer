@@ -12,28 +12,60 @@ using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
+    listView(new QListView),
     window2(new ListSelector(this))
 {
     setWindowTitle("Qildo - dildo storage");
-    QVBoxLayout *main = new QVBoxLayout(this);
+    QVBoxLayout *body = new QVBoxLayout(this);
     resize(800, 800);
 
     loadDefault();
 
+    body->addWidget(listView);
 
+    // Bottom Buttons
+    QHBoxLayout *bottom = new QHBoxLayout;
+    body->addLayout(bottom);
+
+    QPushButton *add_element = new QPushButton("Add");
+    connect(add_element, &QPushButton::clicked, [](bool) {}); // TODO
+    bottom->addWidget(add_element);
+
+    QPushButton *delete_selection = new QPushButton("Delete");
+    connect(delete_selection, &QPushButton::clicked, [this](bool) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Delete", "Delete selected items?", QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            qDebug() << "TODO"; // TODO
+        }
+    });
+    bottom->addWidget(delete_selection);
+
+    QPushButton *defaults = new QPushButton("Restore");
+    connect(defaults, &QPushButton::clicked, [this](bool) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Restore defaults", "Replace current list and restore default 5 items?", QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            loadDefault();
+            qDebug() << "Defaults loaded again";
+        }
+    });
+    bottom->addWidget(defaults);
 
     QPushButton *open_window2 = new QPushButton("Change search params");
-    connect(open_window2, &QPushButton::clicked, [this] (bool) { this->window2->show(); });
-    main->addWidget(open_window2);
+    connect(open_window2, &QPushButton::clicked,
+            [this] (bool) { this->window2->show(); });
+    bottom->addWidget(open_window2);
+    open_window2->setFocus();
 
     ///////////////////////////////////////
 #define cqDebug() cout
     for(size_t i = 0; i < list.size(); i++) {
         cqDebug() << list[i].getCategory()
-             << "\tprice: " << list[i].getPrice()
-             << "\tcolor: " << list[i].getColorName()
-             << "\tleng: " << list[i].getLength()
-             << "\tdiam: " << list[i].getDiam();
+                  << "\tprice: " << list[i].getPrice()
+                  << "\tcolor: " << list[i].getColorName()
+                  << "\tleng: " << list[i].getLength()
+                  << "\tdiam: " << list[i].getDiam();
         if(auto ptr = dynamic_cast<SimpleDildo*>(&list[i]))
             (void)ptr; // no new fields
         else if(auto ptr = dynamic_cast<DoubleDildo*>(&list[i]))

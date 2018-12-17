@@ -1,6 +1,5 @@
 QT += core gui widgets
 TARGET = Qcontainer
-TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++11
 
