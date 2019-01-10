@@ -2,27 +2,29 @@
 #define MAINWINDOW_H
 
 #include <QDialog>
-#include "container_dao.h"
+#include "container_dildo.h"
 #include "dildo.h"
 #include "listselector.h"
+#include "mydildolistwidget.h"
 
 class MainWindow : public QDialog {
 
     Q_OBJECT
 
-    QListView *listView;
-    Container_DAO<Dildo> list;
+    MyDildoListWidget *dildoListWidget;
+    QListView *detailsView;
     ListSelector* window2;
+    Container_Dildo *list;
 
 public:
     MainWindow(QWidget *parent = 0);
-
-public slots:
-    void get_and_apply_validator();
+    ~MainWindow();
+    void keyPressEvent(QKeyEvent *e);
 
 private slots:
     void save() const;
     void load();
+    void update();
 
 private:
     void loadDefault();

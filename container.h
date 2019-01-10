@@ -1,163 +1,124 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
-#include <cstddef>
-#include <type_traits>
-#include "deepptr.h"
 #include "myexception.h"
 #include "validator.h"
 
 template <typename T>
 class Container {
-    DeepPtr<T>* data;
-    size_t len;
-    size_t reserved;
-protected:
-    DeepPtr<T>& getDeepPtr(size_t i) const {
-        if(i < len)
-            return data[i];
-        throw MyException("ArrayIndexOutOfBounds");
-    }
 public:
-    Container() : data(new DeepPtr<T>[2*0]), len(0), reserved(2*0) {
-        /*se voglio generare un Container<T> dove
-        * (is_default_constructible<T>::value == false)
-        * non posso generare un metodo con (data[i] = new T)
-        * In questo modo Container<T> si comporta con std::vector<T> per la costruzione,
-        * mantenendo gli standard STL.
-        */
-    }
+    class iterator;
 
-    Container(size_t n) : data(new DeepPtr<T>[2*n]), len(n), reserved(2*n) {
-            for (size_t i = 0; i < len; i++)
-                data[i] = new T;
-    }
-    Container(const Container<T> & rhs) : data(new DeepPtr<T>[2*rhs.len]), len(rhs.len), reserved(2*rhs.len) {
-        for(size_t i = 0; i < len; i++)
-            data[i] = rhs.data[i];
-    }
-    virtual ~Container() {
-        delete [] data;
-    }
+public://change
+    class node {
+        T *info;
+        node *previous, *next;
+        node(T *info, node *previous = nullptr, node *next = nullptr)
+            : info(info), previous(previous), next(next) {
+				if (previous)
+					previous->next = this;
+				if (next)
+					next->previous = this;
+		}
+        node(const node&) = delete;
+        node& operator = (const node&) = delete;
+        ~node() { if (info) delete info; }
+        friend class Container;
+        friend class iterator;
+    } *first, *last;
 
-    size_t size() const {
-        return len;
-    }
-    void reserve(size_t newsize) {
-        //TODO si può migliorare
-        reserved = newsize;
-        len = ((newsize<len) ? (newsize) : (len));
-        DeepPtr<T>* tmp = new DeepPtr<T>[reserved];
-        for(size_t i = 0; i < len; i++)
-           tmp[i].eat(data[i]);
-        delete [] data;
-        data = tmp;
-    }
-    template < typename U = T>
-    typename std::enable_if< std::is_default_constructible<U>::value, void >::type
-    resize(size_t newsize) {
-        if (newsize > reserved)
-            reserve(newsize*2);
-        for(size_t i = len; i < newsize; i++)
-            data[i] = new T;
-        len = newsize;
+public:
+    class iterator {
+        class accept_all : public Validator<T> {
+            bool operator () (const T&) const { return true; }
+            accept_all* clone() const { return new accept_all; }
+        };
+        Validator<T> *validate;
+        node *current;
 
-    }
-    template < typename U = T>
-    typename std::enable_if< ! std::is_default_constructible<U>::value, void >::type
-    resize(size_t newsize) {
-        if (newsize > reserved)
-            reserve(newsize*2);
-        len = newsize;
-    }
-    /* if is default constructible pass reference
-     * to insert element
-    */
-    template < typename U = T>
-    typename std::enable_if< std::is_default_constructible<U>::value, void >::type
-    insert_into(const U& t, size_t n) {
-        if (n > len)
-            return; // TODO ERR
-        if(len == reserved)
-            reserve((len+1)*2);
-        for(size_t i = len; i > n; i--)
-            data[i].eat(data[i-1]);
-        data[n] = new U(t);
-        len++;
-    }
-    /* if is not default constructible pass pointer
-     * to insert element
-    */
-    template < typename U = T>
-    typename std::enable_if< ! std::is_default_constructible<U>::value, void>::type
-    insert_into(const T* t, size_t n) {
-        if (n > len)
-            throw MyException("ArrayIndexOutOfBounds");
-        if(len == reserved)
-            reserve((len+1)*2);
-        for(size_t i = len; i > n; i--)
-            data[i].eat(data[i-1]);
-        data[n] = t;
-        len++;
-    }
-    void delete_at(size_t n) {
-        if (n >= len)
-            throw MyException("ArrayIndexOutOfBounds");
-        len--;
-        for(size_t i = n; i < len; i++) {
-            data[i].eat(data[i+1]);
+        iterator(node *first, Validator<T> *validate = nullptr) : validate(validate), current(first) {
+            if (!validate)
+                this->validate = new accept_all;
+            if ( current && ! (*(this->validate))(*(current->info)) )
+                operator ++();
         }
-    }
-    /* if is default constructible pass reference
-     * to insert element
-    */
-    template < typename U = T>
-    typename std::enable_if< ! std::is_default_constructible<U>::value, void>::type
-    push_back(const T& t) {
-        insert_into(t, len);
-    }
-    /* if is not default constructible pass pointer
-     * to insert element
-    */
-    template < typename U = T>
-    typename std::enable_if< ! std::is_default_constructible<U>::value, void>::type
-    push_back(const T* t) {
-        insert_into(t, len);
-    }
-    T& operator [] (size_t i) const {
-        if(i < len)
-            return data[i].get();
-        throw MyException("ArrayIndexOutOfBounds");
-    }
+        friend class Container;
 
-
-    class Stream {
-        const Container<T>* super;
-        const Validator<T>* validate;
-        size_t i;
-
-        //private constructor, friended Container<T>
-        friend Stream Container<T>::getStream(Validator<T>*);
-        Stream(const Container<T>* super, Validator<T>* validate)
-            : super(super), validate(validate), i(0) {}
     public:
-        T* getNext() {
-            for(; i<super->size(); i++) {
-                if (! (*validate)((*super)[i]) )
-                    continue;
-                return &((*super)[i++]);
-            }
-            return nullptr;
+        void *cur() const { return current; }
+        void null() { current = nullptr; }
+        iterator(const iterator& it)
+            : validate(it.validate->clone()), current(it.current) {}
+        iterator& operator = (const iterator &it) {
+            if (validate)
+                delete validate;
+            validate = it.validate->clone();
+            current = it.current;
         }
-        void reset() {
-            i = 0;
+        virtual ~iterator() { delete validate; }
+        operator bool() const { return current; }
+        T* operator ++() {
+            if ( current )
+            do { current = current->next; }
+            while ( current && !(*validate)(*(current->info)) );
+            return current ? current->info : nullptr;
         }
-        ~Stream() {
+        T& operator * () const { return *(current->info); }
+        T* operator ->() const { return current->info; }
+        void delete_and_advance() {
+            if (! current)
+                return;
+            if (current->previous)
+                current->previous->next = current->next;
+            if (current->next)
+                current->next->previous = current->previous;
+            node *tmp = current;
+            operator ++();
+            delete tmp;
         }
     };
 
-    Stream getStream(Validator<T>* validate) {
-        return Stream(this, validate);
+    Container() : first(nullptr), last(nullptr) {}
+    Container(const Container<T> & rhs) = delete;
+    virtual ~Container() {
+        iterator it(first);
+        while (it)
+            it.delete_and_advance();
     }
+    void push_front(T* info) {
+        first = new node(info, nullptr, first);
+        if (!last)
+			last = first;
+    }
+    void push_front(const T &info) {
+        push_front(new T(info));
+    }
+    void push_back(T *info) {
+		last = new node(info, last, nullptr);
+		if (!first)
+			first = last;
+	}
+	void push_back(const T &info) {
+		push_back(new T(info));
+	}
+
+    iterator select(Validator<T> *validate) const {
+        return iterator(first, validate);
+    }
+    iterator begin() const {
+        return iterator(first);
+    }
+
 };
 
 #endif // CONTAINER_H
+
+
+
+
+
+
+
+
+
+
+

@@ -71,7 +71,7 @@ ListSelector::ListSelector(QWidget *parent)
     ok->setOrientation(Qt::Horizontal);
     ok->setStandardButtons(QDialogButtonBox::Ok);
     layout->addWidget(ok);
-    connect(ok, SIGNAL(accepted()), parent, SLOT(get_and_apply_validator()));
+    connect(ok, SIGNAL(accepted()), parent, SLOT(update()));
 }
 
 void ListSelector::enabledisablelayouts(int) {

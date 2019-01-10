@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 
     QString path = FileSelector::getPathFromUserInput();
     if ( path == "@nopath@" ) return 1;
-    DAO::setPath( path );
+    DAO::setPath( path.toStdString() );
 
     MainWindow w;
     w.show();

@@ -37,7 +37,7 @@ bool SearchValidator::operator()(const Dildo &dildo) const {
         return false;
     if (is_outside_range(bounds.diam, bounds.diammin, dildo.getDiam(), bounds.diammax))
         return false;
-    if ( category==DoubleDildo && is_outside_range(bounds.diam2, bounds.diam2min, static_cast<const ::DoubleDildo&>(dildo).getDiam2(), bounds.diam2max) )
+    if ( category==DoubleDildo && is_outside_range(bounds.diam2, bounds.diam2min, dynamic_cast<const ::DoubleDildo*>(&dildo)->getDiam2(), bounds.diam2max) )
         return false;
     if (  ( category==ThermoDildo || category==InternalVibrator || category==DildoDeluxe) &&
           is_outside_range(bounds.watt, bounds.wattmin, static_cast<const ::ElectricDildo&>(dildo).getWatts(), bounds.wattmax) )
@@ -50,4 +50,8 @@ bool SearchValidator::operator()(const Dildo &dildo) const {
         return false;
 
     return true;
+}
+
+Validator<Dildo>* SearchValidator::clone() const {
+    return new SearchValidator(this->bounds);
 }

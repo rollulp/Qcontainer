@@ -4,7 +4,9 @@
 template <typename T>
 class Validator {
 public:
-    virtual ~Validator() {};
+    virtual ~Validator() {}
+    virtual Validator<T>* clone() const = 0;
+
     virtual bool operator () (const T &) const = 0;
 };
 

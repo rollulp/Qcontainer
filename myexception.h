@@ -3,6 +3,9 @@
 #include <string>
 #include <exception>
 
+#include <iostream>
+using namespace std;
+
 using std::string;
 
 class MyException : public std::exception

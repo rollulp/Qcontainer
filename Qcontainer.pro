@@ -11,20 +11,20 @@ SOURCES += \
     myexception.cpp \
     fileselector.cpp \
     searchvalidator.cpp \
-    listselector.cpp
+    listselector.cpp \
+    mydildolistwidget.cpp
 
 HEADERS += \
     mainwindow.h \
     dao.h \
     container.h \
-    container_dao.h \
-    deepptr.h \
     dildo.h \
     myexception.h \
     defaults.h \
     fileselector.h \
-    deeptr_dao_dildo.h \
     searchvalidator.h \
     listselector.h \
-    validator.h
+    validator.h \
+    mydildolistwidget.h \
+    container_dildo.h
 

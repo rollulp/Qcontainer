@@ -34,6 +34,6 @@ public:
     } bounds;
     SearchValidator(const AttributeBoundaries &boundaries);
     bool operator() (const Dildo &dildo) const override;
+    Validator<Dildo>* clone() const override;
 };
-
 #endif // SEARCHVALIDATOR_H

@@ -1,6 +1,9 @@
 #ifndef DAO_H
 #define DAO_H
-#include <QString>
+
+#include <string>
+using std::string;
+
 #include <QJsonObject>
 #include <QJsonArray>
 
@@ -10,13 +13,13 @@ public:
     // typedefs qui per cambiare più in fretta in caso non
     // si usasse più Qt
     typedef QJsonObject JSON;
-    typedef QString string;
+    typedef QJsonArray JArray;
 
     static void setPath(const string & s);
     static string getPath();
     static JSON loadFile();
     static void writeFile(const JSON &json);
-    static JSON string2json(const QString& s);
+    static JSON string2json(const string& s);
 
     virtual JSON getJSON () const = 0;
     virtual void loadFromJSON (const JSON &) = 0;

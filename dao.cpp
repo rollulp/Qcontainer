@@ -3,17 +3,17 @@
 #include "dao.h"
 #include "myexception.h"
 
-static QString filename;
+static string filename;
 
-void DAO::setPath(const QString & s) {
+void DAO::setPath(const string & s) {
     filename = s;
 }
-QString DAO::getPath() {
+string DAO::getPath() {
     return filename;
 }
 
 DAO::JSON DAO::loadFile() {
-    QFile jsonFile(filename);
+    QFile jsonFile(QString::fromStdString(filename));
     jsonFile.open(QFile::ReadOnly);
     if (! jsonFile.isReadable())
         throw MyException("cannot read save file, is the path correct?");
@@ -21,7 +21,7 @@ DAO::JSON DAO::loadFile() {
 }
 
 void DAO::writeFile(const JSON &json) {
-    QFile jsonFile(filename);
+    QFile jsonFile(QString::fromStdString(filename));
     jsonFile.open(QFile::WriteOnly);
     if (! jsonFile.isWritable())
         throw MyException("cannot write save file, is the path correct?");
@@ -30,6 +30,6 @@ void DAO::writeFile(const JSON &json) {
     jsonFile.write(document.toJson());
 }
 
-DAO::JSON DAO::string2json(const QString &s) {
-     return QJsonDocument().fromJson( s.toUtf8() ).object();
+DAO::JSON DAO::string2json(const string &s) {
+     return QJsonDocument().fromJson( QString::fromStdString(s).toUtf8() ).object();
 }

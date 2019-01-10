@@ -3,15 +3,24 @@
 
 const char Dildo::color_names[12][7] = {"white", "black", "grey", "red", "pink", "orange", "yellow", "purple", "green", "blue", "silver", "gold"};
 
-Dildo::Dildo(int price, int weight, int length, Color color, string img64)
-    : price(price), diam(weight), length(length), color(color), img64(img64)
+Dildo::Dildo(int price, int weight, int length, Color color, string img64, string title)
+    : price(price), diam(weight), length(length), color(color), img64(img64), title(title)
 {
+    if (title.length() > 24)
+        title = title.substr(0, 25);
     if (price < 0 || diam < 0 || length < 0 || color < 0 || color > GOLD)
         throw MyException("invalid dildo contruction");
 }
 Dildo::Dildo(const Dildo &dildo)
-    : Dildo(dildo.price, dildo.diam, dildo.length, dildo.color, dildo.img64)
+    : Dildo(dildo.price, dildo.diam, dildo.length, dildo.color, dildo.img64, dildo.title)
 {}
+Dildo::~Dildo() {
+      cout << "deleted " << this << endl;
+}
+
+Dildo::string Dildo::getTitle() const {
+    return title;
+}
 int Dildo::getPrice() const {
     return price;
 }
@@ -29,6 +38,10 @@ Dildo::Color Dildo::getColor() const {
 }
 Dildo::string Dildo::getImg() const {
     return img64;
+}
+
+void Dildo::setTitle(Dildo::string title) {
+    this->title = title;
 }
 void Dildo::setPrice(int price) {
     this->price = price;
@@ -59,11 +72,11 @@ VIRTUAL_CHECK(DildoDeluxe, Dildo Deluxe)
 
 #undef VIRTUAL_CHECK
 
-DoubleDildo::DoubleDildo(int price, int diam, int length, Dildo::Color color, string img64, int diam_2)
-    : Dildo(price, diam, length, color, img64), diam_2(diam_2)
+DoubleDildo::DoubleDildo(int price, int diam, int length, Dildo::Color color, string img64, string title, int diam_2)
+    : Dildo(price, diam, length, color, img64, title), diam_2(diam_2)
 {}
 DoubleDildo::DoubleDildo(const DoubleDildo &dd)
-    : DoubleDildo(dd.getPrice(), dd.getDiam(), dd.getLength(), dd.getColor(), dd.getImg(), dd.diam_2)
+    : DoubleDildo(dd.getPrice(), dd.getDiam(), dd.getLength(), dd.getColor(), dd.getImg(), dd.getTitle(), dd.diam_2)
 {}
 int DoubleDildo::getDiam2() const {
     return diam_2;
@@ -73,11 +86,11 @@ void DoubleDildo::setDiam2(int diam_2) {
 }
 
 
-ElectricDildo::ElectricDildo(int price, int diam, int length, Dildo::Color color, string img64, ElectricDildo::Watt watts)
-    : Dildo(price, diam, length, color, img64), watts(watts)
+ElectricDildo::ElectricDildo(int price, int diam, int length, Dildo::Color color, string img64, string title, Watt watts)
+    : Dildo(price, diam, length, color, img64, title), watts(watts)
 {}
 ElectricDildo::ElectricDildo(const ElectricDildo &ed)
-    : ElectricDildo(ed.getPrice(), ed.getDiam(), ed.getLength(), ed.getColor(), ed.getImg(), ed.watts)
+    : ElectricDildo(ed.getPrice(), ed.getDiam(), ed.getLength(), ed.getColor(), ed.getImg(), ed.getTitle(), ed.watts)
 {}
 ElectricDildo::Watt ElectricDildo::getWatts() const {
     return watts;
@@ -87,11 +100,11 @@ void ElectricDildo::setWatts(Watt watts) {
 }
 
 
-ThermoDildo::ThermoDildo(int price, int diam, int length, Color color, string img64, Watt watts, Temp temp)
-    :  ElectricDildo(price, diam, length, color, img64, watts), temp(temp)
+ThermoDildo::ThermoDildo(int price, int diam, int length, Color color, string img64, string title, Watt watts, Temp temp)
+    :  ElectricDildo(price, diam, length, color, img64, title, watts), temp(temp)
 {}
 ThermoDildo::ThermoDildo(const ThermoDildo &td) :
-    ThermoDildo(td.getPrice(), td.getDiam(), td.getLength(), td.getColor(), td.getImg(), td.getWatts(), td.temp)
+    ThermoDildo(td.getPrice(), td.getDiam(), td.getLength(), td.getColor(), td.getImg(), td.getTitle(), td.getWatts(), td.temp)
 {}
 ThermoDildo::Temp ThermoDildo::getTemp() const {
     return temp;
@@ -101,11 +114,11 @@ void ThermoDildo::setTemp(Temp temp) {
 }
 
 
-InternalVibrator::InternalVibrator(int price, int diam, int length, Color color, string img64, Watt watts, Hertz frequency)
-    : ElectricDildo(price, diam, length, color, img64, watts), frequency(frequency)
+InternalVibrator::InternalVibrator(int price, int diam, int length, Color color, string img64, string title, Watt watts, Hertz frequency)
+    : ElectricDildo(price, diam, length, color, img64, title, watts), frequency(frequency)
 {}
 InternalVibrator::InternalVibrator(const InternalVibrator &iv)
-    : InternalVibrator(iv.getPrice(), iv.getDiam(), iv.getLength(), iv.getColor(), iv.getImg(), iv.getWatts(), iv.frequency)
+    : InternalVibrator(iv.getPrice(), iv.getDiam(), iv.getLength(), iv.getColor(), iv.getImg(), iv.getTitle(), iv.getWatts(), iv.frequency)
 {}
 InternalVibrator::Hertz InternalVibrator::getFrequency() const {
     return frequency;
@@ -114,13 +127,13 @@ void InternalVibrator::setFrequency(Hertz frequency) {
     this->frequency = frequency;
 }
 
-DildoDeluxe::DildoDeluxe(int price, int diam, int length, Dildo::Color color, Dildo::string img64, ElectricDildo::Watt watts, InternalVibrator::Hertz frequency, Temp temp)
-    : ElectricDildo(price, diam, length, color, img64, watts),
-      ThermoDildo(price, diam, length, color, img64, watts, temp),
-      InternalVibrator(price, diam, length, color, img64, watts, frequency)
+DildoDeluxe::DildoDeluxe(int price, int diam, int length, Dildo::Color color, Dildo::string img64, string title, ElectricDildo::Watt watts, InternalVibrator::Hertz frequency, Temp temp)
+    : ElectricDildo(price, diam, length, color, img64, title, watts),
+      ThermoDildo(price, diam, length, color, img64, title, watts, temp),
+      InternalVibrator(price, diam, length, color, img64, title, watts, frequency)
 {}
 DildoDeluxe::DildoDeluxe(const DildoDeluxe &ud)
-    : ElectricDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getWatts()),
-      ThermoDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getWatts(), ud.getWatts()),
-      InternalVibrator(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getWatts(), ud.getFrequency())
+    : ElectricDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getTitle(), ud.getWatts()),
+      ThermoDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getTitle(), ud.getWatts(), ud.getWatts()),
+      InternalVibrator(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getTitle(), ud.getWatts(), ud.getFrequency())
 {}
