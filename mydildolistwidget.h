@@ -9,7 +9,7 @@
 class MyDildoListWidget : public QListWidget {
 	Container<Dildo> *list;
 public:
-    void addDildo(const Container<Dildo>::iterator &d, bool hidden = false);
+    void addEntry(const Container<Dildo>::iterator &d, bool hidden = false);
     MyDildoListWidget(Container<Dildo> *list, QWidget *parent = 0);
     void clear();
     void syncView(Validator<Dildo> *validate);

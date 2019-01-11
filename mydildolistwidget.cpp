@@ -19,17 +19,22 @@ MyDildoListWidget::MyDildoListWidget(Container<Dildo> *list, QWidget *parent)
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
-void MyDildoListWidget::addDildo(const Container<Dildo>::iterator &it, bool hidden) {
-    QWidget *w = new QWidget;
-    QHBoxLayout *hl = new QHBoxLayout;
-    hl->addWidget(new QCheckBox);
+namespace {
+QLabel* getImg(const Container<Dildo>::iterator &it) {
     QImage img;
     img.loadFromData( QByteArray::fromBase64( it->getImg().c_str() ) );
     QLabel *imgLabel = new QLabel;
-    imgLabel->setScaledContents(true);
     imgLabel->setPixmap( QPixmap::fromImage(img).scaled(40, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation) );
-    hl->addWidget(imgLabel);
-    hl->addWidget(new QPushButton("ciao"));
+    imgLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    return imgLabel;
+}
+}
+void MyDildoListWidget::addEntry(const Container<Dildo>::iterator &it, bool hidden) {
+    QWidget *w = new QWidget;
+    QHBoxLayout *hl = new QHBoxLayout;
+
+    hl->addWidget(getImg(it));
+    hl->addWidget(new QLabel( QString::fromStdString("  " + it->getTitle()) ));
 
     w->setLayout(hl);
 
@@ -53,7 +58,7 @@ void MyDildoListWidget::syncView(Validator<Dildo> *validate) {
     delete validate;
 }
 
-void MyDildoListWidget::rmSelected(bool) {
+void MyDildoListWidget::rmSelected(bool) { // TODO : se rimuovo il primo; list.begin()?
     auto selected_items = selectedItems();
     if (!selected_items.count()) return;
     if (QMessageBox::question(this, "Delete", "Delete selected items?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)

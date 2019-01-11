@@ -44,8 +44,6 @@ public:
         friend class Container;
 
     public:
-        void *cur() const { return current; }
-        void null() { current = nullptr; }
         iterator(const iterator& it)
             : validate(it.validate->clone()), current(it.current) {}
         iterator& operator = (const iterator &it) {

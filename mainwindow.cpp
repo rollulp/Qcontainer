@@ -23,23 +23,28 @@ MainWindow::MainWindow(QWidget *parent) :
     list(new Container_Dildo)
 {
     setWindowTitle("Qildo - dildo storage");
-    QVBoxLayout *body = new QVBoxLayout(this);
+    QHBoxLayout *body = new QHBoxLayout(this);
     resize(800, 800);
 
     ////////////////////////
 
     load();
 
+    QVBoxLayout *left = new QVBoxLayout;
+    QHBoxLayout *topBtns = new QHBoxLayout;
+    QHBoxLayout *bottomBtns = new QHBoxLayout;
     dildoListWidget = new MyDildoListWidget(list);
-    body->addWidget(dildoListWidget);
+    left->addLayout(topBtns);
+    left->addWidget(dildoListWidget);
+    left->addLayout(bottomBtns);
+    body->addLayout(left);
+
 
     for (auto it = list->begin(); it; ++it)
-        dildoListWidget->addDildo(it);
+        dildoListWidget->addEntry(it);
 
     ///////////////////////
 
-    QHBoxLayout *bottom = new QHBoxLayout;
-    body->addLayout(bottom);
 
     QPushButton *savebtn = new QPushButton("Save");
     connect(savebtn, &QPushButton::clicked, this, &MainWindow::save);
@@ -59,18 +64,18 @@ MainWindow::MainWindow(QWidget *parent) :
             loadDefault();
             update();
             for (auto it = list->begin(); it; ++it)
-                dildoListWidget->addDildo(it);
+                dildoListWidget->addEntry(it);
         }
     });
 
-    QPushButton *open_window2 = new QPushButton("Change search params");
+    QPushButton *open_window2 = new QPushButton("Search..");
     connect(open_window2, &QPushButton::clicked, [&](bool){ window2->show(); });
 
-    bottom->addWidget(savebtn);
-    bottom->addWidget(add_element);
-    bottom->addWidget(delete_selection);
-    bottom->addWidget(restore);
-    bottom->addWidget(open_window2);
+    topBtns->addWidget(savebtn);
+    topBtns->addWidget(restore);
+    topBtns->addWidget(open_window2);
+    bottomBtns->addWidget(add_element);
+    bottomBtns->addWidget(delete_selection);
     open_window2->setFocus();
 
     ///////////////////////////////////////
@@ -102,11 +107,17 @@ void MainWindow::save() const {
 }
 
 void MainWindow::update() {
-     dildoListWidget->syncView(window2->getValidator());
+    dildoListWidget->syncView(window2->getValidator());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e) {
-    if (e->key() != Qt::Key_Escape)
-
+    switch( e->key() ) {
+    case Qt::Key_Delete:
+        dildoListWidget->rmSelected(0);
+        break;
+    case Qt::Key_Escape:
+        return;
+    default:
         QDialog::keyPressEvent(e);
+    }
 }
