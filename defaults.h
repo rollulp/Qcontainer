@@ -1,6 +1,10 @@
 #ifndef DEFAULTS_H
 #define DEFAULTS_H
 
+namespace defaults {
+const int spinner_min  = 0;
+const int spinner_max = 100;
+
 const char* const json_data =
 "{"
 "    \"data\": ["
@@ -62,4 +66,5 @@ const char* const json_data =
 "}"
 ;
 
+} // namespace defaults
 #endif // DEFAULTS_H

@@ -18,13 +18,13 @@ MainWindow::~MainWindow() {
 
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
-    detailsView(new QListView(this)),
+    detailsLayout(new DetailsLayout),
     window2(new ListSelector(this)),
     list(new Container_Dildo)
 {
     setWindowTitle("Qildo - dildo storage");
     QHBoxLayout *body = new QHBoxLayout(this);
-    resize(800, 800);
+    resize(600, 500);
 
     ////////////////////////
 
@@ -34,10 +34,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QHBoxLayout *topBtns = new QHBoxLayout;
     QHBoxLayout *bottomBtns = new QHBoxLayout;
     dildoListWidget = new MyDildoListWidget(list);
+    connect(dildoListWidget, &MyDildoListWidget::itemSelectionChanged, [this] () {
+        auto items = dildoListWidget->selectedItems();
+        if (items.length() != 1)
+            detailsLayout->clear();
+        else
+            detailsLayout->showDildo(static_cast<MyDildoListWidgetItem*>(items[0])->getDildo());
+    });
     left->addLayout(topBtns);
     left->addWidget(dildoListWidget);
     left->addLayout(bottomBtns);
-    body->addLayout(left);
+    body->addLayout(left, 33);
 
 
     for (auto it = list->begin(); it; ++it)
@@ -78,8 +85,8 @@ MainWindow::MainWindow(QWidget *parent) :
     bottomBtns->addWidget(delete_selection);
     open_window2->setFocus();
 
-    ///////////////////////////////////////
-    body->addWidget(detailsView);
+    body->addLayout(detailsLayout, 66);
+
 }
 
 void MainWindow::load() {
@@ -92,7 +99,7 @@ void MainWindow::load() {
 
 void MainWindow::loadDefault() {
     try {
-        list->loadFromJSON(DAO::string2json(json_data));
+        list->loadFromJSON(DAO::string2json(defaults::json_data));
     } catch (MyException e) {
         qDebug() << e.what() << '\n';
     }

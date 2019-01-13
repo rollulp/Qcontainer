@@ -14,9 +14,7 @@ Dildo::Dildo(int price, int weight, int length, Color color, string img64, strin
 Dildo::Dildo(const Dildo &dildo)
     : Dildo(dildo.price, dildo.diam, dildo.length, dildo.color, dildo.img64, dildo.title)
 {}
-Dildo::~Dildo() {
-      cout << "deleted " << this << endl;
-}
+Dildo::~Dildo() { }
 
 Dildo::string Dildo::getTitle() const {
     return title;

@@ -12,7 +12,8 @@ SOURCES += \
     fileselector.cpp \
     searchvalidator.cpp \
     listselector.cpp \
-    mydildolistwidget.cpp
+    mydildolistwidget.cpp \
+    detailslayout.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -26,5 +27,6 @@ HEADERS += \
     listselector.h \
     validator.h \
     mydildolistwidget.h \
-    container_dildo.h
+    container_dildo.h \
+    detailslayout.h
 

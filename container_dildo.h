@@ -45,7 +45,7 @@ class Container_Dildo : virtual public Container<Dildo>, public DAO {
         else if (d == InternalVibrator::category)
             dildo = new InternalVibrator(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["freq"].toInt());
         else if (d == DildoDeluxe::category)
-            dildo = new DildoDeluxe(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["temp"].toInt(), json["freq"].toInt());
+            dildo = new DildoDeluxe(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["freq"].toInt(), json["temp"].toInt());
         else throw MyException("wut");
 
         Container<Dildo>::push_back(dildo);

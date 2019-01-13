@@ -1,16 +1,13 @@
 #include "mydildolistwidget.h"
 #include "container.h"
 
-class MyDildoListWidgetItem : public QListWidgetItem {
-    Container<Dildo>::iterator iterator;
-public:
-    MyDildoListWidgetItem(const Container<Dildo>::iterator &it) : QListWidgetItem(), iterator(it) {}
-    ~MyDildoListWidgetItem() {
-        iterator.delete_and_advance();
-    }
-
-    friend class MyDildoListWidget;
-};
+MyDildoListWidgetItem::MyDildoListWidgetItem(const Container<Dildo>::iterator &it) : QListWidgetItem(), iterator(it) {}
+MyDildoListWidgetItem::~MyDildoListWidgetItem() {
+    iterator.delete_and_advance();
+}
+Dildo& MyDildoListWidgetItem::getDildo() const {
+    return *iterator;
+}
 
 MyDildoListWidget::MyDildoListWidget(Container<Dildo> *list, QWidget *parent)
     : QListWidget(parent),

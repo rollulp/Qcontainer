@@ -6,13 +6,14 @@
 #include "dildo.h"
 #include "listselector.h"
 #include "mydildolistwidget.h"
+#include "detailslayout.h"
 
 class MainWindow : public QDialog {
 
     Q_OBJECT
 
     MyDildoListWidget *dildoListWidget;
-    QListView *detailsView;
+    DetailsLayout *detailsLayout;
     ListSelector* window2;
     Container_Dildo *list;
 
