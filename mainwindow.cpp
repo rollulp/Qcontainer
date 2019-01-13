@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
         if (items.length() != 1)
             detailsLayout->clear();
         else
-            detailsLayout->showDildo(static_cast<MyDildoListWidgetItem*>(items[0])->getDildo());
+            detailsLayout->showDildo(*static_cast<MyDildoListWidgetItem*>(items[0])->getDildo());
     });
     left->addLayout(topBtns);
     left->addWidget(dildoListWidget);
@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QPushButton *add_element = new QPushButton("Add");
     connect(add_element, &QPushButton::clicked, [](bool) {
-        qDebug() << "TODO"; // TODO
+
     });
 
     QPushButton *delete_selection = new QPushButton("Delete");
@@ -105,11 +105,13 @@ void MainWindow::loadDefault() {
     }
 }
 
-void MainWindow::save() const {
-    try {
-        DAO::writeFile( list->getJSON() );
-    } catch (MyException e) {
-        qDebug() << e.what() << '\n';
+void MainWindow::save() {
+    if (QMessageBox::question(this, "Save", "Save current list?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes) {
+        try {
+            DAO::writeFile( list->getJSON() );
+        } catch (MyException e) {
+            qDebug() << e.what() << '\n';
+        }
     }
 }
 

@@ -8,7 +8,6 @@ class Container {
 public:
     class iterator;
 
-public://change
     class node {
         T *info;
         node *previous, *next;
@@ -41,6 +40,15 @@ public:
             if ( current && ! (*(this->validate))(*(current->info)) )
                 operator ++();
         }
+        void trash() {
+            if (! current)
+                return;
+            if (current->previous)
+                current->previous->next = current->next;
+            if (current->next)
+                current->next->previous = current->previous;
+            delete current;
+        }
         friend class Container;
 
     public:
@@ -62,25 +70,13 @@ public:
         }
         T& operator * () const { return *(current->info); }
         T* operator ->() const { return current->info; }
-        void delete_and_advance() {
-            if (! current)
-                return;
-            if (current->previous)
-                current->previous->next = current->next;
-            if (current->next)
-                current->next->previous = current->previous;
-            node *tmp = current;
-            operator ++();
-            delete tmp;
-        }
     };
 
     Container() : first(nullptr), last(nullptr) {}
     Container(const Container<T> & rhs) = delete;
     virtual ~Container() {
-        iterator it(first);
-        while (it)
-            it.delete_and_advance();
+        while (first)
+            remove( begin() );
     }
     void push_front(T* info) {
         first = new node(info, nullptr, first);
@@ -104,6 +100,14 @@ public:
     }
     iterator begin() const {
         return iterator(first);
+    }
+
+    void remove(iterator it) {
+        if (it.current == first)
+            first = first->next;
+        else if (it.current == last)
+            last = last->previous;
+        it.trash();
     }
 
 };

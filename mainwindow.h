@@ -23,7 +23,7 @@ public:
     void keyPressEvent(QKeyEvent *e);
 
 private slots:
-    void save() const;
+    void save();
     void load();
     void update();
 

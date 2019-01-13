@@ -2,11 +2,9 @@
 #include "container.h"
 
 MyDildoListWidgetItem::MyDildoListWidgetItem(const Container<Dildo>::iterator &it) : QListWidgetItem(), iterator(it) {}
-MyDildoListWidgetItem::~MyDildoListWidgetItem() {
-    iterator.delete_and_advance();
-}
-Dildo& MyDildoListWidgetItem::getDildo() const {
-    return *iterator;
+
+Container<Dildo>::iterator MyDildoListWidgetItem::getDildo() const {
+    return iterator;
 }
 
 MyDildoListWidget::MyDildoListWidget(Container<Dildo> *list, QWidget *parent)
@@ -59,7 +57,9 @@ void MyDildoListWidget::rmSelected(bool) { // TODO : se rimuovo il primo; list.b
     auto selected_items = selectedItems();
     if (!selected_items.count()) return;
     if (QMessageBox::question(this, "Delete", "Delete selected items?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
-        for (auto item : selected_items)
+        for (auto item : selected_items) {
+            list->remove( static_cast<MyDildoListWidgetItem*>(item)->getDildo() );
             delete item;
+        }
 }
 

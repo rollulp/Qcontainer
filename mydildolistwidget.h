@@ -9,9 +9,8 @@
 class MyDildoListWidgetItem : public QListWidgetItem {
     Container<Dildo>::iterator iterator;
     MyDildoListWidgetItem(const Container<Dildo>::iterator &it);
-    ~MyDildoListWidgetItem();
 public:
-    Dildo &getDildo() const;
+    Container<Dildo>::iterator getDildo() const;
     friend class MyDildoListWidget;
 };
 

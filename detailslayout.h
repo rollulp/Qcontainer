@@ -22,7 +22,7 @@ class DetailsLayout : public QVBoxLayout {
 
     Q_OBJECT
     QLabel image;
-    Container<EditableLayout> lines; ///couple
+    Container<EditableLayout> lines;
     QPushButton saveBtn;
     Dildo *dildo;
 
