@@ -1,12 +1,11 @@
 #include "mainwindow.h"
 #include "myexception.h"
 #include "defaults.h"
+#include "dildowizard.h"
 #include <QtCore>
 #include <QtWidgets>
 
 #include <QDebug>
-#include <iostream>
-using namespace std;
 
 #include "searchvalidator.h"
 
@@ -57,9 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(savebtn, &QPushButton::clicked, this, &MainWindow::save);
 
     QPushButton *add_element = new QPushButton("Add");
-    connect(add_element, &QPushButton::clicked, [](bool) {
-
-    });
+    connect(add_element, &QPushButton::clicked, [this] (bool) { DildoWizard(this).exec(); });
 
     QPushButton *delete_selection = new QPushButton("Delete");
     connect(delete_selection, &QPushButton::clicked, dildoListWidget, &MyDildoListWidget::rmSelected);
@@ -117,6 +114,11 @@ void MainWindow::save() {
 
 void MainWindow::update() {
     dildoListWidget->syncView(window2->getValidator());
+}
+
+void MainWindow::addDildo(Dildo *dildo) {
+    list->push_back(dildo);
+    dildoListWidget->addEntry(list->end());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e) {

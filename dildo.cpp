@@ -132,6 +132,6 @@ DildoDeluxe::DildoDeluxe(int price, int diam, int length, Dildo::Color color, Di
 {}
 DildoDeluxe::DildoDeluxe(const DildoDeluxe &ud)
     : ElectricDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getTitle(), ud.getWatts()),
-      ThermoDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getTitle(), ud.getWatts(), ud.getWatts()),
+      ThermoDildo(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getTitle(), ud.getWatts(), ud.getTemp()),
       InternalVibrator(ud.getPrice(), ud.getDiam(), ud.getLength(), ud.getColor(), ud.getImg(), ud.getTitle(), ud.getWatts(), ud.getFrequency())
 {}

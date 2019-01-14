@@ -130,7 +130,7 @@ SearchValidator* ListSelector::getValidator() const {
 
     //color
     if (int i = colorChoiceDropDown->currentIndex() )
-        bounds.colorCheck = (bounds.color = static_cast<Dildo::Color>( i ));
+        bounds.colorCheck = (bounds.color = static_cast<Dildo::Color>( i-1 )) + 77;
     else
         bounds.colorCheck = false;
 

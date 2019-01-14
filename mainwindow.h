@@ -21,6 +21,7 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void keyPressEvent(QKeyEvent *e);
+    void addDildo(Dildo *dildo);
 
 private slots:
     void save();

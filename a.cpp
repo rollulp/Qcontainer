@@ -20,7 +20,7 @@ void ab() {
 		a.push_back(i);
 	print(a);
 	cout << "hi" << endl;
-	for (Container<int>::iterator it = a.select(new selector); it; cout << "it:" << *it << endl, it.delete_and_advance());
+	for (Container<int>::iterator it = a.select(new selector); it; cout << "it:" << *it << endl, a.delete(it);
 	cout << "mydick" << endl;
 	print(a);
 }

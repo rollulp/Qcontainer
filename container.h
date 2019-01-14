@@ -101,6 +101,9 @@ public:
     iterator begin() const {
         return iterator(first);
     }
+    iterator end() const {
+        return iterator(last);
+    }
 
     void remove(iterator it) {
         if (it.current == first)

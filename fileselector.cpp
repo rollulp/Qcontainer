@@ -6,7 +6,7 @@
 FileSelector::FileSelector(QWidget *parent, QString &path) :
     QDialog(parent), path(path)
 {
-    this->setWindowTitle("Save file");
+    setWindowTitle("Save file");
 
     path = "@nopath@";
 
