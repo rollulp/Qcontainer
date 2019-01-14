@@ -28,7 +28,41 @@ void MyDildoListWidget::addEntry(const Container<Dildo>::iterator &it, bool hidd
     QWidget *w = new QWidget;
     QHBoxLayout *hl = new QHBoxLayout;
 
+    //color
+    QPixmap pm(10,10);
+    pm.fill();
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    QPen pen(Qt::black, 0);
+    p.setPen(pen);
+    QColor color;
+    switch (it->getColor()) {
+    case Dildo::WHITE:  color.setRgb(255, 255, 255);   break;
+    case Dildo::BLACK:  color.setRgb(000, 000, 000);   break;
+    case Dildo::GREY:   color.setRgb(127, 127, 127);   break;
+    case Dildo::RED:    color.setRgb(230, 000, 000);   break;
+    case Dildo::PINK:   color.setRgb(255, 000, 255);   break;
+    case Dildo::ORANGE: color.setRgb(255, 127, 000);   break;
+    case Dildo::YELLOW: color.setRgb(255, 255, 000);   break;
+    case Dildo::PURPLE: color.setRgb(127, 000, 127);   break;
+    case Dildo::BLUE:   color.setRgb(000, 000, 180);   break;
+    case Dildo::SILVER: color.setRgb(180, 180, 180);   break;
+    case Dildo::GOLD:   color.setRgb(184, 134, 011);   break;
+    default:
+        throw MyException("MyDildoListWidget::addEntry color error");
+    }
+    QBrush brush(color);
+    p.setBrush(brush);
+    p.drawEllipse(0, 0, 10, 10);
+    QLabel *l = new QLabel;
+    l->setPixmap(pm);
+    l->setMaximumSize(20, 20);
+    hl->addWidget(l);
+
+    // img
     hl->addWidget(getImg(it));
+
+    //title
     hl->addWidget(new QLabel( QString::fromStdString("  " + it->getTitle()) ));
 
     w->setLayout(hl);

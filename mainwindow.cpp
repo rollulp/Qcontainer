@@ -28,6 +28,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ////////////////////////
 
     load();
+    if ( !list->begin() &&
+         QMessageBox::question(this, "Restore", "List is empty. Restore defaults?", QMessageBox::Yes|QMessageBox::No)
+         == QMessageBox::Yes)
+        loadDefault();
 
     QVBoxLayout *left = new QVBoxLayout;
     QHBoxLayout *topBtns = new QHBoxLayout;
@@ -63,7 +67,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QPushButton *restore = new QPushButton("Restore");
     connect(restore, &QPushButton::clicked, [this](bool) {
-        if (QMessageBox::question(this, "Restore defaults", "Replace current list and restore default 5 items?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes) {
+        if (QMessageBox::question(this, "Restore defaults", "Replace current list and restore default 5 items?", QMessageBox::Yes|QMessageBox::No)
+                == QMessageBox::Yes) {
             dildoListWidget->clear();
             loadDefault();
             update();

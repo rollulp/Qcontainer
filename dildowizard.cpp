@@ -27,9 +27,11 @@ DildoWizard::DildoWizard(QWidget *parent)
     QLabel *path_preview = new QLabel("...");
     path_preview->setStyleSheet("QLabel { color : grey; }");
     connect(browse, &QPushButton::clicked, [this, path_preview] (bool) {
-        path = QFileDialog::getOpenFileName(this, "Select Image", "/home", "Image (*.jpeg *.jpg *.png)");
-        if ( path.endsWith("jpg") || path.endsWith("png") || path.endsWith("jpeg") )
+        QString path = QFileDialog::getOpenFileName(this, "Select Image", "/home", "Image (*.jpeg *.jpg *.png)");
+        if ( path.endsWith("jpg") || path.endsWith("png") || path.endsWith("jpeg") ) {
             path_preview->setText(path.split("/").back());
+            this->path = path;
+        }
     });
 
 
