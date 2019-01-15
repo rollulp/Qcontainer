@@ -45,6 +45,12 @@ FileSelector::FileSelector(QWidget *parent, QString &path) :
 
 }
 
+/*!
+ * \brief funzione locale per validare il percorso
+ * \param path la stringa da validare
+ * \return se è valida o meno
+ * qui c'è l'unico goto del software, evitabile ma carino
+ */
 static bool validate(QString & path) {
     QFileInfo fi(path);
     if (fi.isDir()) {
@@ -62,9 +68,9 @@ static bool validate(QString & path) {
         return false;
     return fi.isWritable();
 }
+
 QString FileSelector::getPathFromUserInput() {
     QString path;
-
     do {
         FileSelector *fileSelector = new FileSelector(nullptr, path);
         fileSelector->exec();

@@ -12,6 +12,7 @@ DildoWizard::DildoWizard(QWidget *parent)
 {
     setWindowTitle("Add new dildo");
 
+    // combo box categoria dildo e colore
     QStringList types, colors;
     types << SimpleDildo::category
           << DoubleDildo::category
@@ -23,9 +24,12 @@ DildoWizard::DildoWizard(QWidget *parent)
     typeCB->addItems(types);
     colorCB->addItems(colors);
 
+    // per selezionare l' immagine
     QPushButton *browse = new QPushButton("Browse");
+    // per visualizzare preview del file path dell' immagine
     QLabel *path_preview = new QLabel("...");
     path_preview->setStyleSheet("QLabel { color : grey; }");
+    // seleziona il file immagine desiderato
     connect(browse, &QPushButton::clicked, [this, path_preview] (bool) {
         QString path = QFileDialog::getOpenFileName(this, "Select Image", "/home", "Image (*.jpeg *.jpg *.png)");
         if ( path.endsWith("jpg") || path.endsWith("png") || path.endsWith("jpeg") ) {
@@ -34,12 +38,13 @@ DildoWizard::DildoWizard(QWidget *parent)
         }
     });
 
-
+    // bottoni di conferma
     QDialogButtonBox * bb = new QDialogButtonBox;
     bb->setOrientation(Qt::Horizontal);
     bb->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
     connect(bb, &QDialogButtonBox::rejected, this, &DildoWizard::close);
     connect(bb, &QDialogButtonBox::accepted, [this] () {
+        /// QUI creo il dildo
         Dildo *dildo = nullptr;
         QString result = typeCB->currentText();
         if (result == QLatin1String(SimpleDildo::category))
@@ -54,7 +59,7 @@ DildoWizard::DildoWizard(QWidget *parent)
             dildo = new DildoDeluxe(0,0,0,Dildo::WHITE,"","",0,0,0);
         else throw MyException("DildoWizard::DildoWizard err");
 
-        //img
+        // img
         QImage image(path);
         QByteArray byteArray;
         QBuffer buffer(&byteArray);

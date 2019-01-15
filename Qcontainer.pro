@@ -14,7 +14,8 @@ SOURCES += \
     listselector.cpp \
     mydildolistwidget.cpp \
     detailslayout.cpp \
-    dildowizard.cpp
+    dildowizard.cpp \
+    container_dildo.cpp
 
 HEADERS += \
     mainwindow.h \

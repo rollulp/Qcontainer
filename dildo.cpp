@@ -57,6 +57,10 @@ void Dildo::setImg(const string& img64) {
     this->img64 = img64;
 }
 
+
+/// Aggiungo la definzione dei metodo virtuali puri e do Class::cathegory il suo valore
+/// per le classi non astratte
+
 #define VIRTUAL_CHECK(CLASS, NAME) \
     const char * const CLASS::category = #NAME; \
     const char* CLASS::getCategory() const { return category; } \
@@ -69,6 +73,7 @@ VIRTUAL_CHECK(InternalVibrator, Internal Vibrator)
 VIRTUAL_CHECK(DildoDeluxe, Dildo Deluxe)
 
 #undef VIRTUAL_CHECK
+
 
 DoubleDildo::DoubleDildo(int price, int diam, int length, Dildo::Color color, string img64, string title, int diam_2)
     : Dildo(price, diam, length, color, img64, title), diam_2(diam_2)

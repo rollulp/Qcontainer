@@ -75,11 +75,6 @@ void MyDildoListWidget::addEntry(const Container<Dildo>::iterator &it, bool hidd
 
 }
 
-void MyDildoListWidget::clear() {
-    list->first = list->last= nullptr;
-    QListWidget::clear();
-}
-
 void MyDildoListWidget::syncView(Validator<Dildo> *validate) {
     for (int i = count()-1; i >=0 ; i--)
         item(i)->setHidden(!(*validate)(*static_cast<MyDildoListWidgetItem*>(item(i))->iterator));
@@ -87,7 +82,7 @@ void MyDildoListWidget::syncView(Validator<Dildo> *validate) {
     delete validate;
 }
 
-void MyDildoListWidget::rmSelected(bool) { // TODO : se rimuovo il primo; list.begin()?
+void MyDildoListWidget::rmSelected(bool) {
     auto selected_items = selectedItems();
     if (!selected_items.count()) return;
     if (QMessageBox::question(this, "Delete", "Delete selected items?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)

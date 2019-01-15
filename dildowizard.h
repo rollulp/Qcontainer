@@ -5,6 +5,13 @@
 #include <QtWidgets>
 #include "dildo.h"
 
+/*!
+ * \class DildoWizard
+ * Qdialog per aggiungere un nuovo dildo alla lista.
+ * chiede percorso immagine, tipo di dildo, colore e titolo
+ * ed aggiunge a static_cast<MainWindow*>(parent()).list
+ * un nuovo elemento
+ */
 class DildoWizard : public QDialog {
     Q_OBJECT
     QVBoxLayout *body;

@@ -11,7 +11,6 @@
 
 MainWindow::~MainWindow() {
     delete dildoListWidget;
-    list->first = list->last = nullptr;
     delete list;
 }
 

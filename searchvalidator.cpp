@@ -24,6 +24,9 @@ static inline SearchValidator::Category getCategory(const Dildo &dildo) {
 static inline bool is_outside_range(const bool check, int min, int val, int max) {
     return check && (val < min || val > max);
 }
+
+/// quando bisogna controllare se il dildo in questione sottostà
+/// alle specifiche indicate dal validatore
 bool SearchValidator::operator()(const Dildo &dildo) const {
 
     const Category category = getCategory(dildo);

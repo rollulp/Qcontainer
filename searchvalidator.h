@@ -3,8 +3,20 @@
 #include "dildo.h"
 #include "validator.h"
 
+/*!
+ * \class SearchValidator
+ * Validator implementation for the Dildo class.
+ * Possiede un campo AttributeBoundaries per ricordarsi
+ * lo stato della ricerca.
+ * L' operatore parentesi tonde definisce il funtore
+ * di validazione che ritorna il booleano di validità
+ */
 class SearchValidator : public Validator<Dildo> {
 public:
+    /*!
+     * \enum Category
+     * \brief Dildo types needed for AttributeBoundaries to work
+     */
     enum Category {
         SimpleDildo = 1 << 0,
         DoubleDildo = 1 << 1,
@@ -12,6 +24,14 @@ public:
         InternalVibrator = 1 << 3,
         DildoDeluxe = 1 << 4
     };
+    /*!
+     * \struct AttributeBoundaries
+     * Non ho ritenuto necessario incapsulare;
+     * AttributeBoundaries la visualizzo molto di più
+     * come una struct del C che come una classe.
+     * Dopotutto è solo una collezione di bool e int,
+     * voglio evitare masse di codice assurde.
+     */
     struct AttributeBoundaries {
         unsigned int categoryBitMap;
         bool colorCheck;
@@ -30,7 +50,6 @@ public:
         int freqmin, freqmax;
         bool temp;
         int tempmin, tempmax;
-
     } bounds;
     SearchValidator(const AttributeBoundaries &boundaries);
     bool operator() (const Dildo &dildo) const override;

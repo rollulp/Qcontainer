@@ -29,11 +29,22 @@ DetailsLayout::DetailsLayout(QWidget *parent)
     : QVBoxLayout(parent),
       dildo(nullptr)
 {
+    // immagine al centro
     addWidget(&image);
     setAlignment(&image, Qt::AlignHCenter);
 
+    // salvataggio
     saveBtn.setText("Save");
     connect(&saveBtn, &QPushButton::clicked, [this] (bool) {
+        // per ogni campo salvo il valore immesso col giusto setter
+        // e avanzo con l'iteratore.
+        /* una soluzione possibile sarebbe stata dare il puntaore al metodo giusto
+         * da chiamare per salvare il valore ad ogni singolo EditableLayout,
+         * ma non posso chiamare un metodo della classe derivata da un puntatore
+         * alla classe base senza castarlo ad un puntatore della classe derivata
+         * se l'eredità è virtuale, perchè bisogna correggere il puntatore in base
+         * alla vtable della relatica classe, e solo dynamic_cast sa fare questo.
+         */
         auto it = lines.begin();
         this->dildo->setPrice((*it).getValue()); ++it;
         this->dildo->setDiam((*it).getValue()); ++it;
@@ -64,6 +75,8 @@ void DetailsLayout::showDildo(Dildo &dildo) {
     image.show();
 
     EditableLayout *lay;
+
+    /// Aggiungo tutti i nuovi campi tramite un define per semplificare la sintassi
 
 #define addField(CLASS, NAME) do { \
     lay = new EditableLayout(QString(#NAME" : "), dynamic_cast<CLASS*>(this->dildo)->get ## NAME()); \
@@ -100,6 +113,9 @@ void DetailsLayout::clear() {
     image.hide();
 
     //ok, questa prossima riga è solo per divertirsi un po'
+    // svuoto il container e lo ricostruisco al suo posto.
+    // ho trovato la riga troppo bella e dovevo metterla.
+    // chiamo il distruttore e uso il new per costruire nella locazione che voglio io
     lines.~Container(), (void) new (const_cast<Container<EditableLayout>*>(&lines)) Container<EditableLayout*>;
 
     removeWidget(&saveBtn);
