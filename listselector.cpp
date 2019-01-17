@@ -129,10 +129,12 @@ SearchValidator* ListSelector::getValidator() const {
         bounds.categoryBitMap |= Category::DildoDeluxe;
 
     //color
-    if (int i = colorChoiceDropDown->currentIndex() )
-        bounds.colorCheck = (bounds.color = static_cast<Dildo::Color>( i-1 )) + 77;
-    else
+    if (int i = colorChoiceDropDown->currentIndex() ) {
+        bounds.colorCheck = true;
+        bounds.color = static_cast<Dildo::Color>( i-1 );
+    } else {
         bounds.colorCheck = false;
+    }
 
     //attributes
     if ((bounds.len = h_len->isApplicableBound())) {

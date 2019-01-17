@@ -58,7 +58,7 @@ void Dildo::setImg(const string& img64) {
 }
 
 
-/// Aggiungo la definzione dei metodo virtuali puri e do Class::cathegory il suo valore
+/// Aggiungo la definzione dei metodo virtuali puri e do Class::category il suo valore
 /// per le classi non astratte
 
 #define VIRTUAL_CHECK(CLASS, NAME) \

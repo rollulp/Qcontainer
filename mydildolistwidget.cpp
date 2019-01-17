@@ -1,7 +1,9 @@
 #include "mydildolistwidget.h"
 #include "container.h"
 
-MyDildoListWidgetItem::MyDildoListWidgetItem(const Container<Dildo>::iterator &it) : QListWidgetItem(), iterator(it) {}
+MyDildoListWidgetItem::MyDildoListWidgetItem(const Container<Dildo>::iterator &it)
+    : QListWidgetItem(), iterator(it)
+{}
 
 Container<Dildo>::iterator MyDildoListWidgetItem::getDildo() const {
     return iterator;

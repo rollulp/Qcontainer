@@ -10,18 +10,24 @@ Container_Dildo::JSON Container_Dildo::getJSONFromDildo(const typename Container
     json["img64"] = QString::fromStdString(d->getImg());
     json["title"] = QString::fromStdString(d->getTitle());
 
-    /* siccome ho 'virtual getCathegory()', sarebbe molto più efficiente usare quella
-     * per sapere a cosa castare. Ma siccome lo scopo dell' esercizio è di
-     * esplorare il polimorfismo, giù di 'dinamic_cast<T*>' !! */
-    if ( auto ptr = dynamic_cast<const DoubleDildo*>(&*d) )
-        json["diam2"] = ptr->getDiam2();
-    else if ( auto ptr =dynamic_cast<const ElectricDildo*>(&*d) ) {
+    auto category = d->getCategory();
+    if ( category == DoubleDildo::category) {
+        json["diam2"] = static_cast<const DoubleDildo*>(&*d)->getDiam2();
+    } else if (category == ThermoDildo::category) {
+        ThermoDildo const *ptr = dynamic_cast<const ThermoDildo*>(&*d); ///< non posso usare static_cast<>()
         json["watts"] = ptr->getWatts();
-        if ( auto ptr2 = dynamic_cast<const ThermoDildo*>(ptr) )
-            json["temp"] = ptr2->getTemp();
-        if ( auto ptr2 = dynamic_cast<const InternalVibrator*>(ptr) )
-            json["freq"] = ptr2->getFrequency();
+        json["temp"] = ptr->getTemp();
+    } else if (category == InternalVibrator::category) {
+        InternalVibrator const *ptr = dynamic_cast<const InternalVibrator*>(&*d); ///< non posso usare static_cast<>()
+        json["watts"] = ptr->getWatts();
+        json["freq"] = ptr->getFrequency();
+    } else if (category == DildoDeluxe::category) {
+        DildoDeluxe const *ptr = dynamic_cast<const DildoDeluxe*>(&*d); ///< non posso usare static_cast<>()
+        json["watts"] = ptr->getWatts();
+        json["temp"] = ptr->getTemp();
+        json["freq"] = ptr->getFrequency();
     }
+
     return json;
 }
 

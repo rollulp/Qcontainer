@@ -70,7 +70,7 @@ DildoWizard::DildoWizard(QWidget *parent)
 
         dildo->setColor(static_cast<Dildo::Color>(colorCB->currentIndex()));
 
-        dynamic_cast<MainWindow*>(this->parent())->addDildo(dildo);
+        static_cast<MainWindow*>(this->parent())->addDildo(dildo);
         this->close();
     });
 

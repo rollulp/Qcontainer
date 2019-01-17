@@ -1,7 +1,9 @@
 #include "searchvalidator.h"
 #include "myexception.h"
 
-#include <QDebug>
+SearchValidator::SearchValidator(const SearchValidator &searchValidator)
+    : SearchValidator(searchValidator.bounds)
+{}
 
 SearchValidator::SearchValidator(const AttributeBoundaries &bounds)
     : bounds(bounds)
@@ -40,16 +42,16 @@ bool SearchValidator::operator()(const Dildo &dildo) const {
         return false;
     if (is_outside_range(bounds.diam, bounds.diammin, dildo.getDiam(), bounds.diammax))
         return false;
-    if ( category==DoubleDildo && is_outside_range(bounds.diam2, bounds.diam2min, dynamic_cast<const ::DoubleDildo*>(&dildo)->getDiam2(), bounds.diam2max) )
+    if ( category==DoubleDildo && is_outside_range(bounds.diam2, bounds.diam2min, static_cast<const ::DoubleDildo*>(&dildo)->getDiam2(), bounds.diam2max) )
         return false;
     if (  ( category==ThermoDildo || category==InternalVibrator || category==DildoDeluxe) &&
           is_outside_range(bounds.watt, bounds.wattmin, static_cast<const ::ElectricDildo&>(dildo).getWatts(), bounds.wattmax) )
         return false;
     if (  ( category==ThermoDildo || category==DildoDeluxe) &&
-          is_outside_range(bounds.temp, bounds.tempmin, dynamic_cast<const ::ThermoDildo&>(dildo).getTemp(), bounds.tempmax) )
+          is_outside_range(bounds.temp, bounds.tempmin, dynamic_cast<const ::ThermoDildo&>(dildo).getTemp(), bounds.tempmax) ) ///< non posso usare static_cast<>()
         return false;
     if (  ( category==InternalVibrator || category==DildoDeluxe) &&
-          is_outside_range(bounds.freq, bounds.freqmin, dynamic_cast<const ::InternalVibrator&>(dildo).getFrequency(), bounds.freqmax) )
+          is_outside_range(bounds.freq, bounds.freqmin, dynamic_cast<const ::InternalVibrator&>(dildo).getFrequency(), bounds.freqmax) ) ///< non posso usare static_cast<>()
         return false;
 
     return true;

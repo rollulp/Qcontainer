@@ -5,8 +5,6 @@
 #include <QtCore>
 #include <QtWidgets>
 
-#include <QDebug>
-
 #include "searchvalidator.h"
 
 MainWindow::~MainWindow() {
@@ -21,21 +19,29 @@ MainWindow::MainWindow(QWidget *parent) :
     list(new Container_Dildo)
 {
     setWindowTitle("Qildo - dildo storage");
-    QHBoxLayout *body = new QHBoxLayout(this);
+    QHBoxLayout *body = new QHBoxLayout(this); // layout
     resize(600, 500);
 
     ////////////////////////
 
+    // CARICO LISTA IN MEMORIA DAL FILE E CHIEDO SE RIPRISTINARE
     load();
     if ( !list->begin() &&
-         QMessageBox::question(this, "Restore", "List is empty. Restore defaults?", QMessageBox::Yes|QMessageBox::No)
+         QMessageBox::question(this, "Add defaults", "List is empty. Restore defaults?", QMessageBox::Yes|QMessageBox::No)
          == QMessageBox::Yes)
         loadDefault();
 
+    // UN PÒ DI LAYOUT E COSE VARIE .. AGGIUNGO WIDGET
     QVBoxLayout *left = new QVBoxLayout;
     QHBoxLayout *topBtns = new QHBoxLayout;
     QHBoxLayout *bottomBtns = new QHBoxLayout;
     dildoListWidget = new MyDildoListWidget(list);
+    left->addLayout(topBtns);
+    left->addWidget(dildoListWidget);
+    left->addLayout(bottomBtns);
+    body->addLayout(left, 33);
+
+    // CONNETTO LA PARTE A SINISTRA A QUELLA A DESTRA
     connect(dildoListWidget, &MyDildoListWidget::itemSelectionChanged, [this] () {
         auto items = dildoListWidget->selectedItems();
         if (items.length() != 1)
@@ -43,18 +49,14 @@ MainWindow::MainWindow(QWidget *parent) :
         else
             detailsLayout->showDildo(*static_cast<MyDildoListWidgetItem*>(items[0])->getDildo());
     });
-    left->addLayout(topBtns);
-    left->addWidget(dildoListWidget);
-    left->addLayout(bottomBtns);
-    body->addLayout(left, 33);
 
-
+    // POPOLO LA LISTWIDGET ..
     for (auto it = list->begin(); it; ++it)
         dildoListWidget->addEntry(it);
 
     ///////////////////////
 
-
+    // È IL TURNO DEI BOTTONI
     QPushButton *savebtn = new QPushButton("Save");
     connect(savebtn, &QPushButton::clicked, this, &MainWindow::save);
 
@@ -66,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QPushButton *restore = new QPushButton("Restore");
     connect(restore, &QPushButton::clicked, [this](bool) {
-        if (QMessageBox::question(this, "Restore defaults", "Replace current list and restore default 5 items?", QMessageBox::Yes|QMessageBox::No)
+        if (QMessageBox::question(this, "Restore defaults", "Add default 5 items to current list?", QMessageBox::Yes|QMessageBox::No)
                 == QMessageBox::Yes) {
             dildoListWidget->clear();
             loadDefault();
@@ -76,16 +78,17 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
+    // ALTRI BOTTONI ..
     QPushButton *open_window2 = new QPushButton("Search..");
     connect(open_window2, &QPushButton::clicked, [&](bool){ window2->show(); });
 
+    // INSERISCO TUTTO
     topBtns->addWidget(savebtn);
     topBtns->addWidget(restore);
     topBtns->addWidget(open_window2);
     bottomBtns->addWidget(add_element);
     bottomBtns->addWidget(delete_selection);
     open_window2->setFocus();
-
     body->addLayout(detailsLayout, 66);
 
 }

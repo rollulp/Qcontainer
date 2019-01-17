@@ -5,7 +5,7 @@
 
 /*!
  * \class SearchValidator
- * Validator implementation for the Dildo class.
+ * implementazione di Validator per la classe Dildo.
  * Possiede un campo AttributeBoundaries per ricordarsi
  * lo stato della ricerca.
  * L' operatore parentesi tonde definisce il funtore
@@ -51,6 +51,7 @@ public:
         bool temp;
         int tempmin, tempmax;
     } bounds;
+    SearchValidator(const SearchValidator &searchValidator);
     SearchValidator(const AttributeBoundaries &boundaries);
     bool operator() (const Dildo &dildo) const override;
     Validator<Dildo>* clone() const override;

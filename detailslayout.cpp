@@ -38,12 +38,12 @@ DetailsLayout::DetailsLayout(QWidget *parent)
     connect(&saveBtn, &QPushButton::clicked, [this] (bool) {
         // per ogni campo salvo il valore immesso col giusto setter
         // e avanzo con l'iteratore.
-        /* una soluzione possibile sarebbe stata dare il puntaore al metodo giusto
+        /* una soluzione possibile sarebbe stata dare il puntatore al metodo giusto
          * da chiamare per salvare il valore ad ogni singolo EditableLayout,
          * ma non posso chiamare un metodo della classe derivata da un puntatore
          * alla classe base senza castarlo ad un puntatore della classe derivata
          * se l'eredità è virtuale, perchè bisogna correggere il puntatore in base
-         * alla vtable della relatica classe, e solo dynamic_cast sa fare questo.
+         * alla vtable della relativa classe, e solo dynamic_cast sa fare questo.
          */
         auto it = lines.begin();
         this->dildo->setPrice((*it).getValue()); ++it;
@@ -53,17 +53,20 @@ DetailsLayout::DetailsLayout(QWidget *parent)
         if (cat == SimpleDildo::category) {
             ;
         } else if (cat == DoubleDildo::category) {
-            dynamic_cast<DoubleDildo*>(this->dildo)->setDiam2((*it).getValue()); ++it;
+            static_cast<DoubleDildo*>(this->dildo)->setDiam2((*it).getValue()); ++it;
         } else if (cat == InternalVibrator::category) {
-            dynamic_cast<ElectricDildo*>(this->dildo)->setWatts((*it).getValue()); ++it;
-            dynamic_cast<InternalVibrator*>(this->dildo)->setFrequency((*it).getValue()); ++it;
+            auto dildo = dynamic_cast<InternalVibrator*>(this->dildo); ///< non posso usare static_cast<>()
+            dildo->setWatts((*it).getValue()); ++it;
+            dildo->setFrequency((*it).getValue()); ++it;
         } else if (cat == ThermoDildo::category) {
-            dynamic_cast<ElectricDildo*>(this->dildo)->setWatts((*it).getValue()); ++it;
-            dynamic_cast<ThermoDildo*>(this->dildo)->setTemp((*it).getValue()); ++it;
+            auto dildo = dynamic_cast<ThermoDildo*>(this->dildo); ///< non posso usare static_cast<>()
+            dildo->setWatts((*it).getValue()); ++it;
+            dildo->setTemp((*it).getValue()); ++it;
         } else if (cat == DildoDeluxe::category) {
-            dynamic_cast<ElectricDildo*>(this->dildo)->setWatts((*it).getValue()); ++it;
-            dynamic_cast<ThermoDildo*>(this->dildo)->setTemp((*it).getValue()); ++it;
-            dynamic_cast<InternalVibrator*>(this->dildo)->setFrequency((*it).getValue()); ++it;
+            auto dildo = dynamic_cast<DildoDeluxe*>(this->dildo); ///< non posso usare static_cast<>()
+            dildo->setWatts((*it).getValue()); ++it;
+            dildo->setTemp((*it).getValue()); ++it;
+            dildo->setFrequency((*it).getValue()); ++it;
         }
     });
 }
@@ -77,30 +80,31 @@ void DetailsLayout::showDildo(Dildo &dildo) {
     EditableLayout *lay;
 
     /// Aggiungo tutti i nuovi campi tramite un define per semplificare la sintassi
-
-#define addField(CLASS, NAME) do { \
-    lay = new EditableLayout(QString(#NAME" : "), dynamic_cast<CLASS*>(this->dildo)->get ## NAME()); \
+    /// uso dynamic_cast forse un po' troppo ma non importa se ci mette quale µs in più
+#define addField(PTR, NAME) do { \
+    lay = new EditableLayout(QString(#NAME" : "), PTR->get ## NAME()); \
     lines.push_back(lay); \
     addLayout(lay); \
 } while (0)
 
-    addField(Dildo, Price);
-    addField(Dildo, Diam);
-    addField(Dildo, Length);
+    addField(this->dildo, Price);
+    addField(this->dildo, Diam);
+    addField(this->dildo, Length);
     if (dildo.getCategory() == SimpleDildo::category) {
         ;
     } else if (dildo.getCategory() == DoubleDildo::category) {
-        addField(DoubleDildo, Diam2);
+        addField(static_cast<DoubleDildo*>(this->dildo), Diam2);
     } else if (dildo.getCategory() == InternalVibrator::category) {
-        addField(ElectricDildo, Watts);
-        addField(InternalVibrator, Frequency);
+        addField(static_cast<ElectricDildo*>(this->dildo), Watts);
+        addField(dynamic_cast<InternalVibrator*>(this->dildo), Frequency);
     } else if (dildo.getCategory() == ThermoDildo::category) {
-        addField(ElectricDildo, Watts);
-        addField(ThermoDildo, Temp);
+        addField(static_cast<ElectricDildo*>(this->dildo), Watts);
+        addField(dynamic_cast<ThermoDildo*>(this->dildo), Temp);
     } else if (dildo.getCategory() == DildoDeluxe::category) {
-        addField(ElectricDildo, Watts);
-        addField(ThermoDildo, Temp);
-        addField(InternalVibrator, Frequency);
+        auto ptr = dynamic_cast<DildoDeluxe*>(this->dildo);
+        addField(ptr, Watts);
+        addField(ptr, Temp);
+        addField(ptr, Frequency);
     }
 
 #undef addField
@@ -115,7 +119,7 @@ void DetailsLayout::clear() {
     //ok, questa prossima riga è solo per divertirsi un po'
     // svuoto il container e lo ricostruisco al suo posto.
     // ho trovato la riga troppo bella e dovevo metterla.
-    // chiamo il distruttore e uso il new per costruire nella locazione che voglio io
+    // chiamo il distruttore e uso il placement new per costruire nella locazione che voglio io
     lines.~Container(), (void) new (const_cast<Container<EditableLayout>*>(&lines)) Container<EditableLayout*>;
 
     removeWidget(&saveBtn);
