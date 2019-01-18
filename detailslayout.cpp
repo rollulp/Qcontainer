@@ -27,15 +27,26 @@ int EditableLayout::getValue() const {
 
 DetailsLayout::DetailsLayout(QWidget *parent)
     : QVBoxLayout(parent),
-      dildo(nullptr)
+      price(new QLabel),
+      dildo(nullptr),
+      priceRow(new QWidget)
 {
     // immagine al centro
     addWidget(&image);
     setAlignment(&image, Qt::AlignHCenter);
 
+    // prezzo
+    QHBoxLayout *priceLayout = new QHBoxLayout(priceRow);
+    priceLayout->addWidget(new QLabel("Price: "));
+    priceLayout->addStretch();
+    priceLayout->addWidget(price);
+    addWidget(priceRow);
+    priceRow->setHidden(true);
+
     // salvataggio
     saveBtn.setText("Save");
     connect(&saveBtn, &QPushButton::clicked, [this] (bool) {
+        price->setText(QString::number(this->dildo->getPrice()));
         // per ogni campo salvo il valore immesso col giusto setter
         // e avanzo con l'iteratore.
         /* una soluzione possibile sarebbe stata dare il puntatore al metodo giusto
@@ -46,7 +57,6 @@ DetailsLayout::DetailsLayout(QWidget *parent)
          * alla vtable della relativa classe, e solo dynamic_cast sa fare questo.
          */
         auto it = lines.begin();
-        this->dildo->setPrice((*it).getValue()); ++it;
         this->dildo->setDiam((*it).getValue()); ++it;
         this->dildo->setLength((*it).getValue()); ++it;
         auto cat = this->dildo->getCategory();
@@ -77,6 +87,9 @@ void DetailsLayout::showDildo(Dildo &dildo) {
     image.setPixmap( getPixmap(dildo.getImg().c_str()) );
     image.show();
 
+    priceRow->setHidden(false);
+    price->setText(QString::number(this->dildo->getPrice()));
+
     EditableLayout *lay;
 
     /// Aggiungo tutti i nuovi campi tramite un define per semplificare la sintassi
@@ -87,7 +100,6 @@ void DetailsLayout::showDildo(Dildo &dildo) {
     addLayout(lay); \
 } while (0)
 
-    addField(this->dildo, Price);
     addField(this->dildo, Diam);
     addField(this->dildo, Length);
     if (dildo.getCategory() == SimpleDildo::category) {
@@ -114,7 +126,8 @@ void DetailsLayout::showDildo(Dildo &dildo) {
 }
 
 void DetailsLayout::clear() {
-    image.hide();
+    image.setHidden(true);
+    priceRow->hide();
 
     //ok, questa prossima riga è solo per divertirsi un po'
     // svuoto il container e lo ricostruisco al suo posto.
@@ -122,7 +135,6 @@ void DetailsLayout::clear() {
     // chiamo il distruttore e uso il placement new per costruire nella locazione che voglio io
     lines.~Container(), (void) new (const_cast<Container<EditableLayout>*>(&lines)) Container<EditableLayout*>;
 
-    removeWidget(&saveBtn);
     saveBtn.hide();
     dildo = nullptr;
 }

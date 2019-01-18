@@ -48,15 +48,15 @@ DildoWizard::DildoWizard(QWidget *parent)
         Dildo *dildo = nullptr;
         QString result = typeCB->currentText();
         if (result == QLatin1String(SimpleDildo::category))
-            dildo = new SimpleDildo(0,0,0,Dildo::WHITE,"","");
+            dildo = new SimpleDildo(0,0,Dildo::WHITE,"","");
         else if (result == QLatin1String(DoubleDildo::category))
-            dildo = new DoubleDildo(0,0,0,Dildo::WHITE,"","",0);
+            dildo = new DoubleDildo(0,0,Dildo::WHITE,"","",0);
         else if (result == QLatin1String(InternalVibrator::category))
-            dildo = new InternalVibrator(0,0,0,Dildo::WHITE,"","",0,0);
+            dildo = new InternalVibrator(0,0,Dildo::WHITE,"","",0,0);
         else if (result == QLatin1String(ThermoDildo::category))
-            dildo = new ThermoDildo(0,0,0,Dildo::WHITE,"","",0,0);
+            dildo = new ThermoDildo(0,0,Dildo::WHITE,"","",0,0);
         else if (result == QLatin1String(DildoDeluxe::category))
-            dildo = new DildoDeluxe(0,0,0,Dildo::WHITE,"","",0,0,0);
+            dildo = new DildoDeluxe(0,0,Dildo::WHITE,"","",0,0,0);
         else throw MyException("DildoWizard::DildoWizard err");
 
         // img

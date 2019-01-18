@@ -39,10 +39,11 @@ public:
 class DetailsLayout : public QVBoxLayout {
 
     Q_OBJECT
-    QLabel image;
+    QLabel image, *price;
     Container<EditableLayout> lines;
     QPushButton saveBtn;
     Dildo *dildo;
+    QWidget *priceRow;
 
 public:
     DetailsLayout(QWidget *parent = 0);

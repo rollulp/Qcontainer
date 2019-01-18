@@ -3,7 +3,6 @@
 Container_Dildo::JSON Container_Dildo::getJSONFromDildo(const typename Container<Dildo>::iterator &d) const {
     JSON json;
     json["type"] = d->getCategory();
-    json["price"] = d->getPrice();
     json["diam"] = d->getDiam();
     json["len"] =  d->getLength();
     json["color"] = static_cast<int>( d->getColor() );
@@ -35,15 +34,15 @@ void Container_Dildo::addDildoFromJSON (const JSON &json) {
     auto d = json["type"].toString();
     Dildo* dildo;
     if (d == SimpleDildo::category)
-        dildo = new SimpleDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString());
+        dildo = new SimpleDildo(json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString());
     else if (d == DoubleDildo::category)
-        dildo = new DoubleDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["diam2"].toInt());
+        dildo = new DoubleDildo(json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["diam2"].toInt());
     else if (d == ThermoDildo::category)
-        dildo = new ThermoDildo(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["temp"].toInt());
+        dildo = new ThermoDildo(json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["temp"].toInt());
     else if (d == InternalVibrator::category)
-        dildo = new InternalVibrator(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["freq"].toInt());
+        dildo = new InternalVibrator(json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["freq"].toInt());
     else if (d == DildoDeluxe::category)
-        dildo = new DildoDeluxe(json["price"].toInt(), json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["freq"].toInt(), json["temp"].toInt());
+        dildo = new DildoDeluxe(json["diam"].toInt(), json["len"].toInt(), (Dildo::Color)(json["color"].toInt()), json["img64"].toString().toStdString(), json["title"].toString().toStdString(), json["watts"].toInt(), json["freq"].toInt(), json["temp"].toInt());
     else throw MyException("wut");
 
     Container<Dildo>::push_back(dildo);
