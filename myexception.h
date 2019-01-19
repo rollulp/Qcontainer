@@ -3,6 +3,11 @@
 #include <string>
 #include <exception>
 
+//!
+//! Ho usato questa classe per includere header temporanei,
+//! come iostream o QDebug, o definire costanti. Alla fine
+//! ho lasciato la classe qui.
+//!
 using std::string;
 
 /*!
